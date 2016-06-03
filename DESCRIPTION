@@ -10,3 +10,5 @@ License: MIT
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports: h2o, parallel, doParallel, foreach
+URL: http://github.com/gaofeng21cn/DeepCC
+BugReports: http://github.com/gaofeng21cn/DeepCC/issues
