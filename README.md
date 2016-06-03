@@ -8,7 +8,7 @@ Current version of DeepCC deepends H2O deep learning framework, implemented by J
 You can install DeepCC from GitHub directly using devtools.
 ```
 install.packages("devtools")
-devtools::install_github("hadley/devtools")
+devtools::install_github("gaofeng21cn/DeepCC")
 ```
 
 ## Quick Start
