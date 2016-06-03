@@ -1,0 +1,12 @@
+Package: DeepCC
+Type: Package
+Title: DeepCC: a deep learning-based framework for cancer classification
+Version: 0.1.0
+Author: Feng Gao, Xin Wang
+Maintainer: Feng Gao <gaofeng21cn@gmail.com>
+Description: DeepCC is versatile and robust cancer subtyping framework, based on
+    deep learning and incorporate functional gene sets as prior knowledge.
+License: GPL-2
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports: h2o, parallel, doParallel, foreach
