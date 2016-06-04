@@ -25,7 +25,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 
 #' Get DeepCC Labels
 #'
-#' This function classify new data set using trained DeepCC model.
+#' This function classifys new data set using trained DeepCC model.
 #'
 #' @param DeepCCModel a trained h2o deep learning model
 #' @param newData a data.frame containing functional spectra of new data (each row presents one sample)
@@ -44,4 +44,21 @@ getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
     } else { NA }
   })
   predicted
+}
+
+#' Get DeepCC Features
+#'
+#' This function obtains DeepCC Features from functional spectra.
+#'
+#' @param DeepCCModel a trained h2o deep learning model
+#' @param fs a data.frame containing functional spectra (each row presents one sample)
+#' @return a data.frame containing DeepCC Features extracted from the last hidden layer
+#' @export
+#' @examples
+#' getDeepCCFeatures(deepcc.model, fs)
+getDeepCCFeatures <- function(DeepCCModel, fs){
+  nLayers <- length(DeepCCModel@allparameters$hidden)
+
+  features <- h2o::h2o.deepfeatures(DeepCCModel,  h2o::as.h2o(fs), layer = nLayers)
+  as.data.frame(features)
 }

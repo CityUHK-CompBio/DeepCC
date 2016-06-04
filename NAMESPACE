@@ -2,6 +2,7 @@
 
 export(calcEnrichmentScore)
 export(crossValidataion)
+export(getDeepCCFeatures)
 export(getDeepCCLabels)
 export(getFunctionalSpectra)
 export(trainDeepCCModel)

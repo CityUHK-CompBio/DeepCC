@@ -12,11 +12,11 @@ devtools::install_github("gaofeng21cn/DeepCC")
 ```
 
 ## Quick Start
-As a case study, you can obtain well organized data from CRCSC's repository on [Synapse](https://www.synapse.org/#!Synapse:syn2623706/wiki/).
+As a case study, you can obtain well organized colorectal cancer data from CRCSC's repository on [Synapse](https://www.synapse.org/#!Synapse:syn2623706/wiki/).
 
-DeepCC only need two input for training.
+DeepCC only need two input for start.
 - a data.frame containing gene expression profiles (each row represents one patient sample and the column names should be Entrez identifiers of genes)
-- a character vector containing training labels (NA is allowed since DeepCC can ignore them automatically)
+- a character vector containing training labels (`NA` is allowed since DeepCC can ignore them automatically)
 
 Now assume you have the gene expression profiles in `eps` and training labels in `labels`.
 ```
@@ -30,10 +30,13 @@ fs <- getFunctionalSpectra(eps)
 # use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
 deepcc.model <- trainDeepCCModel(fs, labels)
 
+# obtain deep features
+getDeepCCFeatures(deepcc.model, fs)
+
 # classify new data set used trained DeepCC model
-new.fs <- etFunctionalSpectra(new.eps)
+new.fs <- getFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
 
 ## Additional tools
-- `crossValidataion` perform cross validation.
+- `crossValidataion` performs cross validation.
