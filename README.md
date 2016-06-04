@@ -34,3 +34,6 @@ deepcc.model <- trainDeepCCModel(fs, labels)
 new.fs <- etFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
+
+## Additional tools
+- `crossValidataion` perform cross validation.
