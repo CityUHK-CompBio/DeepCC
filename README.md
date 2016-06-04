@@ -2,7 +2,7 @@
 DeepCC: a deep learning-based framework for cancer classification
 
 ## Dependence
-Current version of DeepCC deepends H2O deep learning framework, implemented by Java thus you should install JRE first. Please following the instructions on [h2o.ai](http://www.h2o.ai/download/h2o/r).
+Current version of DeepCC depends on H2O deep learning framework, implemented by Java thus you should install JRE first. Please following the instructions on [h2o.ai](http://www.h2o.ai/download/h2o/r).
 
 ## Installation
 You can install DeepCC from GitHub directly using devtools.
