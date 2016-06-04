@@ -12,10 +12,25 @@ devtools::install_github("gaofeng21cn/DeepCC")
 ```
 
 ## Quick Start
-Assume you have the gene expression profiles in `tcga.eps` (each row represents one patient sample) and training labels in `tcga.labels`.
-```
-tcga.fs <- getFunctionalSpectra(tcga.eps)
+As a case study, you can obtain well organized data from CRCSC's repository on [Synapse](https://www.synapse.org/#!Synapse:syn2623706/wiki/).
 
-deepcc.model <- trainDeepCCModel(tcga.fs, tcga.labels)
-tcga.pred.lables <- getDeepCCLabels(deepcc.model, tcga.fs)
+DeepCC only need two input for training.
+- a data.frame containing gene expression profiles (each row represents one patient sample and the column names should be Entrez identifiers of genes)
+- a character vector containing training labels (NA is allowed since DeepCC can ignore them automatically)
+
+Now assume you have the gene expression profiles in `eps` and training labels in `labels`.
+```
+library(DeepCC)
+
+# get functional spectra from gene expression profiles
+# use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
+fs <- getFunctionalSpectra(eps)
+
+# train DeepCC model
+# use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
+deepcc.model <- trainDeepCCModel(fs, labels)
+
+# classify new data set used trained DeepCC model
+new.fs <- etFunctionalSpectra(new.eps)
+pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
