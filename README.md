@@ -31,7 +31,7 @@ fs <- getFunctionalSpectra(eps)
 deepcc.model <- trainDeepCCModel(fs, labels)
 
 # obtain deep features
-getDeepCCFeatures(deepcc.model, fs)
+df <- getDeepCCFeatures(deepcc.model, fs)
 
 # classify new data set used trained DeepCC model
 new.fs <- getFunctionalSpectra(new.eps)
@@ -39,4 +39,8 @@ pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
 
 ## Additional tools
+#### Benchmark
 - `crossValidataion` performs cross validation.
+
+#### Plotting
+- `plotKMCurve` plots Kaplan-Meier curve.
