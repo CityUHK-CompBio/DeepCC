@@ -17,7 +17,7 @@ getDeepCCLabels(DeepCCModel, newData, cutoff = 0.5)
 a character vector containing lables of training data
 }
 \description{
-This function classify new data set using trained DeepCC model.
+This function classifys new data set using trained DeepCC model.
 }
 \examples{
 getDeepCCLabels(deepcc.model, newdata.fs)

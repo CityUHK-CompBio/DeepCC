@@ -30,7 +30,13 @@ fs <- getFunctionalSpectra(eps)
 # use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
 deepcc.model <- trainDeepCCModel(fs, labels)
 
+# obtain deep features
+getDeepCCFeatures(deepcc.model, fs)
+
 # classify new data set used trained DeepCC model
-new.fs <- etFunctionalSpectra(new.eps)
+new.fs <- getFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
+
+## Additional tools
+- `crossValidataion` performs cross validation.
