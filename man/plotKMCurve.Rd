@@ -4,18 +4,23 @@
 \alias{plotKMCurve}
 \title{Plot Kaplan-Meier Curve}
 \usage{
-plotKMCurve(clinical, labels, data_set = NULL, color = NULL, font = 10)
+plotKMCurve(clinical, labels, annot = NULL, color = NULL, font = 10,
+  xlab = "Follow up (weeks)", ylab = "DFS (prob.)")
 }
 \arguments{
 \item{clinical}{a survival object created by Surv function in survival package}
 
 \item{labels}{a vector containing subtyping labels of patients}
 
-\item{data_set}{a character indicating the name of the data set}
+\item{annot}{a character indicating the annotation showed up in the plot}
 
 \item{color}{a vector containing colors used for different subtypes}
 
 \item{font}{a numeric indicating the font size used in the plot}
+
+\item{xlab}{a character indicating the label of x-axis (default: "Follow up (weeks)")}
+
+\item{ylab}{a character indicating the label of y-axis (default: "DFS (prob.)")}
 }
 \value{
 a ggplot2 object of the plot
