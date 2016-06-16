@@ -32,15 +32,15 @@ plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = 10,
   }
 
   p <- GGally::ggsurv(surv, surv.col = color, cens.col = color, xlab = xlab, ylab = ylab) +
-    annotate("text", x = Inf, y = Inf, label = paste0("P==", fancy_scientific(survstats$p.value, 3)), hjust = 1.2, vjust = 2, size=font/3, parse = TRUE) +
+    annotate("text", x = Inf, y = Inf, label = paste0("P==", fancy_scientific(survstats$p.value, 3)), hjust = 1.2, vjust = 2, parse = TRUE) +
     theme_bw() +
     theme(text = element_text(size=font),
           legend.title=element_blank(),
           axis.text=element_text(size=font),
-          axis.title=element_text(size=font*1.2))
+          axis.title=element_text(size=font))
 
   # annotate data set name
-  if(!is.null(annot)) p <- p + annotate("text", x = 0, y = 0, label = annot, hjust = 0, vjust = 0, size=font/3)
+  if(!is.null(annot)) p <- p + annotate("text", x = 0, y = 0, label = annot, hjust = 0, vjust = 0)
 
   p
 }
