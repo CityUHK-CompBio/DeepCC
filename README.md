@@ -34,8 +34,14 @@ deepcc.model <- trainDeepCCModel(fs, labels)
 df <- getDeepCCFeatures(deepcc.model, fs)
 
 # classify new data set used trained DeepCC model
+# for a batch of samples
 new.fs <- getFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
+
+# for single sample, you have to provide a reference expression profile.
+# In DeepCC we prepared average expression profile of each cancer types in TCGA project as reference. To use them, just use the TCGA identifier to indicate the cancer type. Alternatively, you can provide your own reference of the platform and cancer type.
+new.fs <- getFunctionalSpectrum(new.ep, refExp = "COADREAD")
+pred.lable <- getDeepCCLabels(deepcc.model, new.fs)
 ```
 
 ## Additional tools

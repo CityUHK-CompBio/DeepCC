@@ -64,10 +64,10 @@ getFunctionalSpectra <- function(eps, geneSets = MSigDB, cores = parallel::detec
   eps <- scale(eps, scale = FALSE)
 
   doParallel::registerDoParallel(cores)
-  res <- do.call(rbind, foreach(idx=1:nrow(eps)) %dopar% {
+  res <- foreach(idx = 1:nrow(eps), .combine = rbind) %dopar% {
     geneList <- preprocessGeneList(eps[idx,])
     sapply(geneSets, function(x) calcEnrichmentScore(geneList, x))
-  })
+  }
   rownames(res) <- rownames(eps)
   res
 }
