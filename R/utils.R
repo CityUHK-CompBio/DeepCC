@@ -8,8 +8,8 @@
 #' @return a numeric indicating error rate in a single run
 #' @export
 #' @examples
-#' crossValidataion(tcga.fs, tcga.labels)
-crossValidataion <- function(fs, labels, fold = 5) {
+#' cross_validataion(tcga.fs, tcga.labels)
+cross_validataion <- function(fs, labels, fold = 5) {
   fs <- fs[!is.na(labels), ]
   labels <- na.omit(labels)
 

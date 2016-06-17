@@ -5,7 +5,7 @@
 \title{Generate Functional Spectrum}
 \usage{
 getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp,
-  logChange = F)
+  logChange = F, inverseRescale = F, filter = -3)
 }
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
@@ -14,7 +14,11 @@ getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp,
 
 \item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector containing reference expression}
 
-\item{cores}{a integer indicating cpu cores used in parallel computing (defaut = all cores - 1)}
+\item{logChange}{a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)}
+
+\item{inverseRescale}{a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)}
+
+\item{filter}{a numeric indicating the cutoff value of expression. (default: -3)}
 }
 \value{
 a numeric vector containing functional spectrum

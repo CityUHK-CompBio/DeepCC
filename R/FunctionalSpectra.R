@@ -79,12 +79,14 @@ getFunctionalSpectra <- function(eps, geneSets = MSigDB, cores = parallel::detec
 #' @param expressionProfile a named numeric vector containing gene expression profile
 #' @param geneSets a List containg gene sets (defaut = MSigDB v5.0)
 #' @param refExp a character indicating cancer typer according to TCGA's indentifier, or a named vector containing reference expression
-#' @param cores a integer indicating cpu cores used in parallel computing (defaut = all cores - 1)
+#' @param logChange a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)
+#' @param inverseRescale a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)
+#' @param filter a numeric indicating the cutoff value of expression. (default: -3)
 #' @return a numeric vector containing functional spectrum
 #' @export
 #' @examples
 #' getFunctionalSpectrum(ep)
-getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp, logChange = F) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
@@ -92,10 +94,16 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp, 
       if(!(refExp %in% rownames(ref_eps))) stop(paste(refExp, "is not a support identifier of cancer types!\n  Please use one in :", paste(row.names(ref_eps), collapse = " ")))
       refExp <- ref_eps[refExp, ]
     }
+    # filter low expressed genes
+    refExp <- refExp[refExp > filter]
 
     common <- intersect(names(expressionProfile), names(refExp))
-    lm_res <- coef(lm(expressionProfile[common] ~ refExp[common]))
-    expressionProfile <- expressionProfile[common] - (refExp[common] * lm_res[2] + lm_res[1])
+    if(inverseRescale) {
+      expressionProfile <- predict(lm(refExp[common] ~ expressionProfile[common])) - expressionProfile[common]
+    } else {
+      expressionProfile <- expressionProfile[common] - predict(lm(expressionProfile[common] ~ refExp[common]))
+    }
+
   }
   geneList <- preprocessGeneList(expressionProfile)
 

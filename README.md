@@ -32,21 +32,30 @@ deepcc.model <- trainDeepCCModel(fs, labels)
 
 # obtain deep features
 df <- getDeepCCFeatures(deepcc.model, fs)
+```
 
+After training, now you can use your DeepCC model to classify new sample(s). DeepCC supports both batch sample and single sample classification. The input data should be in the same format as above gene expression profile(s).
+
+```
 # classify new data set used trained DeepCC model
 # for a batch of samples
 new.fs <- getFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 
-# for single sample, you have to provide a reference expression profile.
-# In DeepCC we prepared average expression profile of each cancer types in TCGA project as reference. To use them, just use the TCGA identifier to indicate the cancer type. Alternatively, you can provide your own reference of the platform and cancer type.
+# for a single sample, you have to provide a reference expression profile.
 new.fs <- getFunctionalSpectrum(new.ep, refExp = "COADREAD")
 pred.lable <- getDeepCCLabels(deepcc.model, new.fs)
 ```
+Note: You can generate the reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform.
+
+In DeepCC we also prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
+
+Note: if your single sample is microarray data, we strongly sugguest turn the parameter `inverseRescale` on, since TCGA is RNA-Seq, which has very small expression value for low expressed genes, compared with microarray.
+
 
 ## Additional tools
 #### Benchmark
-- `crossValidataion` performs cross validation.
+- `cross_validataion` performs cross validation.
 
 #### Plotting
 - `plotKMCurve` plots Kaplan-Meier curve.
