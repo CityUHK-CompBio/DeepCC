@@ -8,7 +8,7 @@ Current version of DeepCC depends on H2O deep learning framework, implemented by
 You can install DeepCC from GitHub directly using devtools.
 ```
 install.packages("devtools")
-devtools::install_github("gaofeng21cn/DeepCC")
+devtools::install_github("CityUHK-CompBio/DeepCC")
 ```
 
 ## Quick Start

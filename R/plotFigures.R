@@ -13,7 +13,7 @@
 #' @import ggplot2
 #' @export
 #' @examples
-#' clinical <- Surv(t.rfs, e.rfs)
+#' clinical <- survival::Surv(t.rfs, e.rfs)
 #' color.cms <- c("#E69E00","#0070B0","#CA78A6", "#009C73")
 #' plotKMCurve(clinical, labels, "GSE39582", color.cms)
 plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = 10, xlab = "Follow up (weeks)", ylab = "DFS (prob.)"){
