@@ -53,9 +53,10 @@ calcEnrichmentScore <- function (geneList, geneSet)
 #' This function generates functional spectra for given gene expression profiles.
 #'
 #' @param eps a data.frame containing gene expression profiles (each row presents one sample)
-#' @param geneSets a List containg gene sets (defaut = MSigDB v5.0)
-#' @param cores a integer indicating cpu cores used in parallel computing (defaut = all cores - 1)
+#' @param geneSets a List containg gene sets (default: MSigDB v5.0)
+#' @param cores a integer indicating cpu cores used in parallel computing (default = all cores - 1)
 #' @return a data.frame containing functional spectra
+#' @seealso \code{\link{getFunctionalSpectrum}} for a single gene expression profile.
 #' @importFrom foreach foreach %dopar%
 #' @export
 #' @examples
@@ -74,18 +75,22 @@ getFunctionalSpectra <- function(eps, geneSets = MSigDB, cores = parallel::detec
 
 #' Generate Functional Spectrum
 #'
-#' This function generates functional spectrum for a single given gene expression profile.
+#' This function generates functional spectrum for a single gene expression profile.
 #'
 #' @param expressionProfile a named numeric vector containing gene expression profile
-#' @param geneSets a List containg gene sets (defaut = MSigDB v5.0)
+#' @param geneSets a List containg gene sets (default: MSigDB v5.0)
 #' @param refExp a character indicating cancer typer according to TCGA's indentifier, or a named vector containing reference expression
 #' @param logChange a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)
 #' @param inverseRescale a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)
 #' @param filter a numeric indicating the cutoff value of expression. (default: -3)
 #' @return a numeric vector containing functional spectrum
+#' @note You can generate the reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform.
+#' In DeepCC we also prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
+#' If your single sample is microarray data, we strongly sugguest turn the parameter \code{inverseRescale} on, since TCGA is RNA-Seq, which has very small expression value for low expressed genes, compared with microarray.
+#' @seealso \code{\link{getFunctionalSpectra}} for a batch of gene expression profiles.
 #' @export
 #' @examples
-#' getFunctionalSpectrum(ep)
+#' getFunctionalSpectrum(ep, refExp = "COADREAD")
 getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {

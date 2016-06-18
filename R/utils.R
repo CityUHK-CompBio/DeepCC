@@ -4,7 +4,7 @@
 #'
 #' @param fs a data.frame containing functional spectra of patients (each row presents one sample)
 #' @param labels a character vector containing training lables
-#' @param fold a integer indicating the fold number of cross validation (defaut = 5)
+#' @param fold a integer indicating the fold number of cross validation (default: 5)
 #' @return a numeric indicating error rate in a single run
 #' @export
 #' @examples

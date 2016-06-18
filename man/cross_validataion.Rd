@@ -11,7 +11,7 @@ cross_validataion(fs, labels, fold = 5)
 
 \item{labels}{a character vector containing training lables}
 
-\item{fold}{a integer indicating the fold number of cross validation (defaut = 5)}
+\item{fold}{a integer indicating the fold number of cross validation (default: 5)}
 }
 \value{
 a numeric indicating error rate in a single run

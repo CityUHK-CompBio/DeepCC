@@ -4,13 +4,13 @@
 \alias{getFunctionalSpectrum}
 \title{Generate Functional Spectrum}
 \usage{
-getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp,
+getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp = NULL,
   logChange = F, inverseRescale = F, filter = -3)
 }
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
 
-\item{geneSets}{a List containg gene sets (defaut = MSigDB v5.0)}
+\item{geneSets}{a List containg gene sets (default: MSigDB v5.0)}
 
 \item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector containing reference expression}
 
@@ -24,9 +24,17 @@ getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp,
 a numeric vector containing functional spectrum
 }
 \description{
-This function generates functional spectrum for a single given gene expression profile.
+This function generates functional spectrum for a single gene expression profile.
+}
+\note{
+You can generate the reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform.
+In DeepCC we also prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
+If your single sample is microarray data, we strongly sugguest turn the parameter \code{inverseRescale} on, since TCGA is RNA-Seq, which has very small expression value for low expressed genes, compared with microarray.
 }
 \examples{
-getFunctionalSpectrum(ep)
+getFunctionalSpectrum(ep, refExp = "COADREAD")
+}
+\seealso{
+\code{\link{getFunctionalSpectra}} for a batch of gene expression profiles.
 }
 

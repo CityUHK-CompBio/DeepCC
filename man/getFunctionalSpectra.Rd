@@ -10,9 +10,9 @@ getFunctionalSpectra(eps, geneSets = MSigDB, cores = parallel::detectCores()
 \arguments{
 \item{eps}{a data.frame containing gene expression profiles (each row presents one sample)}
 
-\item{geneSets}{a List containg gene sets (defaut = MSigDB v5.0)}
+\item{geneSets}{a List containg gene sets (default: MSigDB v5.0)}
 
-\item{cores}{a integer indicating cpu cores used in parallel computing (defaut = all cores - 1)}
+\item{cores}{a integer indicating cpu cores used in parallel computing (default = all cores - 1)}
 }
 \value{
 a data.frame containing functional spectra
@@ -22,5 +22,8 @@ This function generates functional spectra for given gene expression profiles.
 }
 \examples{
 getFunctionalSpectra(eps)
+}
+\seealso{
+\code{\link{getFunctionalSpectrum}} for a single gene expression profile.
 }
 
