@@ -86,7 +86,7 @@ getFunctionalSpectra <- function(eps, geneSets = MSigDB, cores = parallel::detec
 #' @export
 #' @examples
 #' getFunctionalSpectrum(ep)
-getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp, logChange = F, inverseRescale = F, filter = -3) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
@@ -103,7 +103,6 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp, 
     } else {
       expressionProfile <- expressionProfile[common] - predict(lm(expressionProfile[common] ~ refExp[common]))
     }
-
   }
   geneList <- preprocessGeneList(expressionProfile)
 
