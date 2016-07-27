@@ -31,7 +31,7 @@ plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = "Ar
     color <- color[1:length(unique(labels))]
   }
 
-  p <- GGally::ggsurv(surv, surv.col = color, cens.col = color, xlab = xlab, ylab = ylab) +
+  p <- GGally::ggsurv(surv, surv.col = color, xlab = xlab, ylab = ylab) +
     annotate("text", family=font, x = Inf, y = Inf, label =
                paste0("italic(P)==", fancy_scientific(survstats$p.value,3)), hjust = 1.2, vjust = 2,parse = TRUE) +
     theme(text = element_text(family=font),
