@@ -11,10 +11,6 @@ LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports: h2o, parallel, doParallel, foreach, survival, GGally, RColorBrewer
 Depends: ggplot2, cowplot
-<<<<<<< HEAD
 URL: http://github.com/CityUHK-CompBio/DeepCC
 BugReports: http://github.com/CityUHK-CompBio/DeepCC/issues
-=======
-URL: http://github.com/gaofeng21cn/DeepCC
-BugReports: http://github.com/gaofeng21cn/DeepCC/issues
->>>>>>> a36a929c5b0dfdc24f6ea58826ac7c2b1c78b8b0
+

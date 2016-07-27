@@ -31,18 +31,10 @@ plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = "Ar
     color <- color[1:length(unique(labels))]
   }
 
-<<<<<<< HEAD
-  p <- GGally::ggsurv(surv, surv.col = color, cens.col = color,
-                      xlab = xlab, ylab = ylab) + annotate("text", family="Arial", x = Inf,
-                                                           y = Inf, label = paste0("italic(P)==", fancy_scientific(survstats$p.value,
-                                                                                                                   3)), hjust = 1.2, vjust = 2,parse = TRUE) +
-    theme(text = element_text(family="Arial"),
-=======
   p <- GGally::ggsurv(surv, surv.col = color, cens.col = color, xlab = xlab, ylab = ylab) +
     annotate("text", family=font, x = Inf, y = Inf, label =
                paste0("italic(P)==", fancy_scientific(survstats$p.value,3)), hjust = 1.2, vjust = 2,parse = TRUE) +
     theme(text = element_text(family=font),
->>>>>>> a36a929c5b0dfdc24f6ea58826ac7c2b1c78b8b0
           legend.title = element_blank())
 
   # annotate data set name
