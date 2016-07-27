@@ -6,17 +6,17 @@
 #' @param labels a vector containing subtyping labels of patients
 #' @param annot a character indicating the annotation showed up in the plot
 #' @param color a vector containing colors used for different subtypes
-#' @param font a numeric indicating the font size used in the plot
+#' @param font a character indicating the font used in the plot (default: "Arial")
 #' @param xlab a character indicating the label of x-axis (default: "Follow up (weeks)")
 #' @param ylab a character indicating the label of y-axis (default: "DFS (prob.)")
 #' @return a ggplot2 object of the plot
-#' @import ggplot2
+#' @import ggplot2 cowplot
 #' @export
 #' @examples
 #' clinical <- survival::Surv(t.rfs, e.rfs)
 #' color.cms <- c("#E69E00","#0070B0","#CA78A6", "#009C73")
 #' plotKMCurve(clinical, labels, "GSE39582", color.cms)
-plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = 10, xlab = "Follow up (weeks)", ylab = "DFS (prob.)"){
+plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = "Arial", xlab = "Follow up (weeks)", ylab = "DFS (prob.)"){
   obj <-  clinical ~ labels
   surv <- survival::survfit(obj)
   survstats <- survival::survdiff(obj)
@@ -31,15 +31,22 @@ plotKMCurve <- function(clinical, labels, annot = NULL, color = NULL, font = 10,
     color <- color[1:length(unique(labels))]
   }
 
+<<<<<<< HEAD
   p <- GGally::ggsurv(surv, surv.col = color, cens.col = color,
                       xlab = xlab, ylab = ylab) + annotate("text", family="Arial", x = Inf,
                                                            y = Inf, label = paste0("italic(P)==", fancy_scientific(survstats$p.value,
                                                                                                                    3)), hjust = 1.2, vjust = 2,parse = TRUE) +
     theme(text = element_text(family="Arial"),
+=======
+  p <- GGally::ggsurv(surv, surv.col = color, cens.col = color, xlab = xlab, ylab = ylab) +
+    annotate("text", family=font, x = Inf, y = Inf, label =
+               paste0("italic(P)==", fancy_scientific(survstats$p.value,3)), hjust = 1.2, vjust = 2,parse = TRUE) +
+    theme(text = element_text(family=font),
+>>>>>>> a36a929c5b0dfdc24f6ea58826ac7c2b1c78b8b0
           legend.title = element_blank())
 
   # annotate data set name
-  if(!is.null(annot)) p <- p + annotate("text", x = 0, y = 0, label = annot, hjust = 0, size = font/2.5, vjust = 0)
+  if(!is.null(annot)) p <- p + annotate("text", x = 0, y = 0, label = annot, hjust = 0, vjust = 0)
 
   p
 }
