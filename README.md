@@ -38,5 +38,5 @@ new.fs <- getFunctionalSpectra(new.eps)
 pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
 ```
 
-## Additional tools
+## Additional Tools
 - `crossValidataion` performs cross validation.
