@@ -28,15 +28,3 @@ cross_validataion <- function(fs, labels, fold = 5) {
   error_rate <- 1-mean(as.character(testData.labels) == as.character(pred.lables))
   error_rate
 }
-
-#' Transform scientific notation to expression form
-fancy_scientific <- function(l, digits = 3) {
-  # turn in to character string in scientific notation
-  l <- format(l, scientific = TRUE, digits = digits)
-  # quote the part before the exponent to keep all the digits
-  l <- gsub("^(.*)e", "'\\1'e", l)
-  # turn the 'e+' into plotmath format
-  l <- gsub("e", "%*%10^", l)
-  # return this as an expression
-  parse(text=l)
-}
