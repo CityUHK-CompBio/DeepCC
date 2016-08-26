@@ -5,7 +5,7 @@
 \title{Train DeepCC Model}
 \usage{
 trainDeepCCModel(trainData, trainLabels, hiddenLayers = c(2000, 500, 120, 30,
-  10), cores = parallel::detectCores() - 1)
+  10), cores = NULL, device = "cpu")
 }
 \arguments{
 \item{trainData}{a data.frame containing functional spectra of training data (each row presents one sample)}
@@ -14,10 +14,12 @@ trainDeepCCModel(trainData, trainLabels, hiddenLayers = c(2000, 500, 120, 30,
 
 \item{hiddenLayers}{a numeric vector containing hidden layers architecture}
 
-\item{cores}{a integer indicating cpu cores used in parallel computing (defaut = all cores - 1)}
+\item{cores}{a integer indicating cpu cores used in parallel computing or GPUs (defaut = all cores - 1)}
+
+\item{device}{a string indicating using CPU or GPU (defaut = "cpu")}
 }
 \value{
-a trained h2o deep learning model
+a trained h2o/mxnet deep learning model
 }
 \description{
 This function trains DeepCC Model on the training data.
