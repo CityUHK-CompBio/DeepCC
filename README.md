@@ -64,5 +64,5 @@ In DeepCC we prepared average expression profiles of each cancer types in TCGA p
 Note: if your single sample is microarray data, we strongly suggest you turn the parameter `inverseRescale` on, since TCGA is RNA-Seq data, which has very small expression value for low expressed genes, compared with microarray. `inverseRescale` can overcome this distribution different a little bit, but it's better to generate your customized reference.
 
 ## Additional tools
-- `crossValidataion` performs cross validation.
+- `cross_validataion` performs cross validation.
 
