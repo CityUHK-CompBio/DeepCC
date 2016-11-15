@@ -19,33 +19,14 @@ preprocessGeneList <- function(geneList) {
 #' @param geneList a named vector containing the values of gene expression
 #' @param geneSet a vector containing genes to represent a gene set
 #' @return a numeric indicating enrichment score
+#' @useDynLib DeepCC
+#' @import Rcpp
 #' @export
 #' @examples
 #' calcEnrichmentScore(geneList, geneSet)
 calcEnrichmentScore <- function (geneList, geneSet)
 {
-  hits <- (names(geneList) %in% geneSet)
-  nh <- sum(hits)
-  N <- length(geneList)
-  ES <- 0
-  runningES <- rep(0, N)
-  if (nh > N) {
-    stop("Gene Set is larger than Gene List")
-  }
-  else {
-    if (nh) {
-      tmp <- rep(0, N)
-      NR = sum(abs(geneList[hits]))
-      tmp[hits] <- abs(geneList[hits])/NR
-      tmp[!hits] <- -1/(N - nh)
-      runningES <- cumsum(tmp)
-
-      ESmax <- max(runningES)
-      ESmin <- min(runningES)
-      ES <- ifelse(abs(ESmin) > abs(ESmax), ESmin, ESmax)
-    }
-  }
-  ES
+  calcEnrichmentScoreCPP((names(geneList) %in% geneSet), geneList, 1)
 }
 
 #' Generate Functional Spectra
