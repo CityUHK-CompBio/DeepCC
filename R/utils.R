@@ -41,5 +41,5 @@ cross_validataion <- function(fs, labels, fold = 5) {
 
 get_gene_sets <- function(file) {
   msig <- GSEABase::getGmt(file, geneIdType=EntrezIdentifier())
-  MSigDBv5.1 <- GSEABase::geneIds(msig)
+  GSEABase::geneIds(msig)
 }
