@@ -19,7 +19,7 @@ trainDeepCCModel(trainData, trainLabels, hiddenLayers = c(2000, 500, 120, 30,
 \item{device}{a string indicating using CPU or GPU (defaut = "cpu")}
 }
 \value{
-a trained h2o/mxnet deep learning model
+a trained DeepCC model
 }
 \description{
 This function trains DeepCC Model on the training data.

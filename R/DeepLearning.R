@@ -7,7 +7,7 @@
 #' @param hiddenLayers a numeric vector containing hidden layers architecture
 #' @param cores a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 1)
 #' @param device a string indicating using CPU or GPU (defaut = "cpu")
-#' @return a trained h2o/mxnet deep learning model
+#' @return a trained DeepCC model
 #' @export
 #' @examples
 #' trainDeepCCModel(tcga.fs, tcga.labels)
@@ -34,19 +34,6 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
                                initializer = mx.init.Xavier(),
                                device = device)
 
-    # if(is.null(cores)) cores <- parallel::detectCores() - 1
-    # h2o::h2o.init(nthreads = cores)
-    # train_sv <- h2o::as.h2o(data.frame(trainData, class=trainLabels)[!is.na(trainLabels), ])
-    #
-    # classifier <- h2o::h2o.deeplearning(x = 1:ncol(trainData), y=ncol(trainData)+1,
-    #                                     training_frame = train_sv,
-    #                                     activation="Tanh",
-    #                                     epochs = 100,
-    #                                     hidden = hiddenLayers,
-    #                                     ignore_const_cols=F
-    # )
-
-
   list(classifier=classifier, levels=levels)
 }
 
@@ -54,7 +41,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 #'
 #' This function classifys new data set using trained DeepCC model.
 #'
-#' @param DeepCCModel a trained h2o deep learning model
+#' @param DeepCCModel a trained DeepCC model
 #' @param newData a data.frame containing functional spectra of new data (each row presents one sample)
 #' @param cutoff a numeric indicating cutoff of poster probability
 #' @return a character vector containing lables of training data
@@ -62,15 +49,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 #' @examples
 #' getDeepCCLabels(deepcc.model, newdata.fs)
 getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
-  # res <- as.data.frame(h2o::h2o.predict(DeepCCModel, h2o::as.h2o(newData)))
-  # res <- data.frame(res[, -1])
-  #
-  # predicted <- apply(res,1,function(z) {
-  #   if(max(z) >= cutoff ) {
-  #     colnames(res)[which.max(z)]
-  #   } else { NA }
-  # })
-  # predicted
+
 
   res <- predict(DeepCCModel$classifier, newData, array.layout="rowmajor")
 
@@ -88,17 +67,16 @@ getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
 #'
 #' This function obtains DeepCC Features from functional spectra.
 #'
-#' @param DeepCCModel a trained h2o deep learning model
+#' @param DeepCCModel a trained DeepCC model
 #' @param fs a data.frame containing functional spectra (each row presents one sample)
 #' @return a data.frame containing DeepCC Features extracted from the last hidden layer
 #' @export
 #' @examples
 #' getDeepCCFeatures(deepcc.model, fs)
 getDeepCCFeatures <- function(DeepCCModel, fs){
-  # nLayers <- length(DeepCCModel@allparameters$hidden)
-  #
-  # features <- h2o::h2o.deepfeatures(DeepCCModel,  h2o::as.h2o(fs), layer = nLayers)
-  # as.data.frame(features)
+
+  ## modified from fdavidcl on github
+  ## ref: https://github.com/dmlc/mxnet/issues/2785
 
   predictInternal <- function(model, X, ctx=NULL, layer, array.batch.size=128, array.layout="auto") {
     # initialization stuff I probably don't care about ---------------------------

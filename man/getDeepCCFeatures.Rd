@@ -7,7 +7,7 @@
 getDeepCCFeatures(DeepCCModel, fs)
 }
 \arguments{
-\item{DeepCCModel}{a trained h2o deep learning model}
+\item{DeepCCModel}{a trained DeepCC model}
 
 \item{fs}{a data.frame containing functional spectra (each row presents one sample)}
 }

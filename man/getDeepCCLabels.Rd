@@ -7,7 +7,7 @@
 getDeepCCLabels(DeepCCModel, newData, cutoff = 0.5)
 }
 \arguments{
-\item{DeepCCModel}{a trained h2o deep learning model}
+\item{DeepCCModel}{a trained DeepCC model}
 
 \item{newData}{a data.frame containing functional spectra of new data (each row presents one sample)}
 
