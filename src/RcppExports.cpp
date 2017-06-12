@@ -18,3 +18,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"DeepCC_calcEnrichmentScoreCPP", (DL_FUNC) &DeepCC_calcEnrichmentScoreCPP, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_DeepCC(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

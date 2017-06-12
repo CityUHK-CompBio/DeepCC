@@ -84,7 +84,7 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp =
     refExp <- refExp[refExp > filter]
 
     common <- intersect(names(expressionProfile), names(refExp))
-    if(inverseRescale) {
+    if(!inverseRescale) {
       expressionProfile <- predict(lm(refExp[common] ~ expressionProfile[common])) - expressionProfile[common]
     } else {
       expressionProfile <- expressionProfile[common] - predict(lm(expressionProfile[common] ~ refExp[common]))

@@ -14,7 +14,7 @@ trainDeepCCModel(trainData, trainLabels, hiddenLayers = c(2000, 500, 120, 30,
 
 \item{hiddenLayers}{a numeric vector containing hidden layers architecture}
 
-\item{cores}{a integer indicating cpu cores used in parallel computing or GPUs (defaut = all cores - 1)}
+\item{cores}{a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 1)}
 
 \item{device}{a string indicating using CPU or GPU (defaut = "cpu")}
 }

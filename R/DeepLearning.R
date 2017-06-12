@@ -5,44 +5,49 @@
 #' @param trainData a data.frame containing functional spectra of training data (each row presents one sample)
 #' @param trainLabels a character vector containing lables of training data
 #' @param hiddenLayers a numeric vector containing hidden layers architecture
-#' @param cores a integer indicating cpu cores used in parallel computing or GPUs (defaut = all cores - 1)
+#' @param cores a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 1)
 #' @param device a string indicating using CPU or GPU (defaut = "cpu")
 #' @return a trained h2o/mxnet deep learning model
 #' @export
 #' @examples
 #' trainDeepCCModel(tcga.fs, tcga.labels)
 trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120,30,10), cores = NULL, device = "cpu") {
+  fs <- data.matrix(trainData[!is.na(trainLabels), ])
+  labels <- as.factor(na.omit(trainLabels))
+  levels <- levels(labels)
+
   if(device == "gpu") {
-    device.gpu <- lapply(0:(cores-1), function(i) {
-      mx.gpu(i)
-    })
+    if(is.null(cores)) cores <- 1
+    device <- lapply(0:(cores-1), mx.gpu)
+    } else {
+    device  <- mx.cpu()
+    }
 
-    fs <- data.matrix(trainData[!is.na(labels), ])
-    labels <- as.factor(na.omit(trainLabels))
+  classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
+                               hidden_node=hiddenLayers, out_node=length(levels),
+                               out_activation="softmax", num.round=30, eval.metric=mx.metric.accuracy,
+                               learning.rate=0.01,
+                               momentum=0.9,
+                               optimizer = "sgd",
+                               # optimizer = "adadelta", # adadelta is also good, w/o pre-setting learning rate and momentum
+                               activation = "tanh",
+                               initializer = mx.init.Xavier(),
+                               device = device)
 
-    classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
-                    hidden_node=hiddenLayers, out_node=length(levels(labels)),
-                    out_activation="softmax", num.round=100, eval.metric=mx.metric.accuracy,
-                    learning.rate=0.1,
-                    momentum=0.9,
-                    initializer=mx.init.uniform(0.07),
-                    device = device.gpu)
-  }
-    else {
-    if(is.null(cores)) cores <- parallel::detectCores() - 1
-    h2o::h2o.init(nthreads = cores)
-    train_sv <- h2o::as.h2o(data.frame(trainData, class=trainLabels)[!is.na(trainLabels), ])
+    # if(is.null(cores)) cores <- parallel::detectCores() - 1
+    # h2o::h2o.init(nthreads = cores)
+    # train_sv <- h2o::as.h2o(data.frame(trainData, class=trainLabels)[!is.na(trainLabels), ])
+    #
+    # classifier <- h2o::h2o.deeplearning(x = 1:ncol(trainData), y=ncol(trainData)+1,
+    #                                     training_frame = train_sv,
+    #                                     activation="Tanh",
+    #                                     epochs = 100,
+    #                                     hidden = hiddenLayers,
+    #                                     ignore_const_cols=F
+    # )
 
-    classifier <- h2o::h2o.deeplearning(x = 1:ncol(trainData), y=ncol(trainData)+1,
-                                        training_frame = train_sv,
-                                        activation="Tanh",
-                                        epochs = 100,
-                                        hidden = hiddenLayers,
-                                        ignore_const_cols=F
-    )
-  }
 
-  classifier
+  list(classifier=classifier, levels=levels)
 }
 
 #' Get DeepCC Labels
@@ -57,15 +62,26 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 #' @examples
 #' getDeepCCLabels(deepcc.model, newdata.fs)
 getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
-  res <- as.data.frame(h2o::h2o.predict(DeepCCModel, h2o::as.h2o(newData)))
-  res <- data.frame(res[, -1])
+  # res <- as.data.frame(h2o::h2o.predict(DeepCCModel, h2o::as.h2o(newData)))
+  # res <- data.frame(res[, -1])
+  #
+  # predicted <- apply(res,1,function(z) {
+  #   if(max(z) >= cutoff ) {
+  #     colnames(res)[which.max(z)]
+  #   } else { NA }
+  # })
+  # predicted
 
-  predicted <- apply(res,1,function(z) {
+  res <- predict(DeepCCModel$classifier, newData, array.layout="rowmajor")
+
+  predicted <- apply(res, 2, function(z) {
     if(max(z) >= cutoff ) {
-      colnames(res)[which.max(z)]
+      which.max(z)
     } else { NA }
   })
-  predicted
+  factor(predicted, levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
+
+  #predicted <- factor(apply(predict(DeepCCModel$classifier, newData, array.layout="rowmajor"), 2, which.max), levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
 }
 
 #' Get DeepCC Features
@@ -79,8 +95,66 @@ getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
 #' @examples
 #' getDeepCCFeatures(deepcc.model, fs)
 getDeepCCFeatures <- function(DeepCCModel, fs){
-  nLayers <- length(DeepCCModel@allparameters$hidden)
+  # nLayers <- length(DeepCCModel@allparameters$hidden)
+  #
+  # features <- h2o::h2o.deepfeatures(DeepCCModel,  h2o::as.h2o(fs), layer = nLayers)
+  # as.data.frame(features)
 
-  features <- h2o::h2o.deepfeatures(DeepCCModel,  h2o::as.h2o(fs), layer = nLayers)
-  as.data.frame(features)
+  predictInternal <- function(model, X, ctx=NULL, layer, array.batch.size=128, array.layout="auto") {
+    # initialization stuff I probably don't care about ---------------------------
+    if (is.null(ctx)) ctx <- mxnet:::mx.ctx.default()
+    if (is.array(X) || is.matrix(X)) {
+      if (array.layout == "auto") {
+        array.layout <- mxnet:::mx.model.select.layout.predict(X, model)
+      }
+      if (array.layout == "rowmajor") {
+        X <- t(X)
+      }
+    }
+    # end initialization ---------------------------------------------------------
+    # iterator creation ----------------------------------------------------------
+    ## X iterates through the batches of input data
+    X <- mxnet:::mx.model.init.iter(X, NULL, batch.size=array.batch.size, is.train=FALSE)
+    X$reset()
+    if (!X$iter.next()) stop("Cannot predict on empty iterator")
+    dlist = X$value()
+    # end iterator creation ------------------------------------------------------
+    # executor creation ----------------------------------------------------------
+    ## mx.simple.bind defined in https://github.com/dmlc/mxnet/blob/master/R-package/R/executor.R#L5
+    ## internally calls mx.symbol.bind, defined in https://github.com/dmlc/mxnet/blob/master/R-package/src/executor.cc#L191
+    ### see also: https://github.com/dmlc/mxnet/blob/e7514fe1b3265aaf15870b124bb6ed0edd82fa76/R-package/demo/basic_executor.R
+    # pexec <- mxnet:::mx.simple.bind(model$symbol, ctx=ctx, data=dim(dlist$data), grad.req="null")
+    internals <- model$symbol$get.internals()
+    pexec <- mxnet:::mx.simple.bind(internals[[4 * layer]], ctx=ctx, data=dim(dlist$data), grad.req="null")
+    # end executor creation ------------------------------------------------------
+    # set up arg arrays ----------------------------------------------------------
+    internalArgParams <- model$arg.params[1:(2 * layer)]
+    # print(names(internalArgParams))
+
+    mxnet:::mx.exec.update.arg.arrays(pexec, internalArgParams, match.name=T)
+    mxnet:::mx.exec.update.aux.arrays(pexec, model$aux.params, match.name=T)
+    # end set up arg arrays ------------------------------------------------------
+    # the rest is left untouched -------------------------------------------------
+    packer <- mxnet:::mx.nd.arraypacker()
+    X$reset()
+    while (X$iter.next()) {
+      dlist = X$value()
+      mxnet:::mx.exec.update.arg.arrays(pexec, list(data=dlist$data), match.name=T)
+      mxnet:::mx.exec.forward(pexec, is.train=FALSE)
+      out.pred <- mxnet:::mx.nd.copyto(pexec$ref.outputs[[1]], mxnet:::mx.cpu())
+      padded <- X$num.pad()
+      oshape <- dim(out.pred)
+      ndim <- length(oshape)
+      packer$push(mxnet:::mx.nd.slice(out.pred, 0, oshape[[ndim]] - padded))
+    }
+    X$reset()
+    df <- t(packer$get())
+    rownames(df) <- colnames(X)
+    return(df)
+  }
+
+  model <- DeepCCModel$classifier
+  layer <- length(model$symbol$get.internals()$arguments)/2 - 2
+
+  predictInternal(model, fs, layer = layer, array.layout = "rowmajor", array.batch.size = 1)
 }
