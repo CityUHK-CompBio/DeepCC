@@ -50,9 +50,7 @@ Note: You can generate customized reference expression profile from your previou
 ## Pre-defined data in DeepCC
 
 ### List of functional gene sets
-By default, DeepCC will use MSigDB v5.0 (10,348 gene sets) to generate functional spectra.
-
-Note: If you have facilities to run GPU-accelarated DeepCC, we strongly suggest you use the least MSigDB v5.1 (13,311 gene sets) to get better classification performance.
+By default, DeepCC will use MSigDB v6.0 (17, 779 gene sets) to generate functional spectra.
 
 ### Pre-defined reference
 In DeepCC we prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.

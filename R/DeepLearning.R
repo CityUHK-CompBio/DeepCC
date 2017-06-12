@@ -5,20 +5,18 @@
 #' @param trainData a data.frame containing functional spectra of training data (each row presents one sample)
 #' @param trainLabels a character vector containing lables of training data
 #' @param hiddenLayers a numeric vector containing hidden layers architecture
-#' @param cores a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 1)
-#' @param device a string indicating using CPU or GPU (defaut = "cpu")
+#' @param gups a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 0)
 #' @return a trained DeepCC model
 #' @export
 #' @examples
 #' trainDeepCCModel(tcga.fs, tcga.labels)
-trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120,30,10), cores = NULL, device = "cpu") {
+trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120,30,10), gpus = 0) {
   fs <- data.matrix(trainData[!is.na(trainLabels), ])
   labels <- as.factor(na.omit(trainLabels))
   levels <- levels(labels)
 
-  if(device == "gpu") {
-    if(is.null(cores)) cores <- 1
-    device <- lapply(0:(cores-1), mx.gpu)
+  if(gpus > 0) {
+    device <- lapply(0:(gpus-1), mx.gpu)
     } else {
     device  <- mx.cpu()
     }
