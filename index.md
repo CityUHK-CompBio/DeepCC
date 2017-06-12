@@ -2,9 +2,7 @@
 DeepCC: a deep learning-based framework for cancer classification
 
 ## Dependencies
-CPU version of DeepCC depends on H2O deep learning framework, implemented by Java thus you should install JRE first. Please following the instructions on [h2o.ai](http://www.h2o.ai/download/h2o/r).
-
-GPU-accelarated DeepCC uses MXNET as its backend and is currently undergoing test, with limited functions.
+DeepCC dependes on MXNet framework, supporting both multiple CPUs and GPUs. Please install MXNet first according to their instruction.
 
 ## Installation
 You can install DeepCC from GitHub directly using devtools.
@@ -25,11 +23,9 @@ Now assume you have the gene expression profiles in `eps` and training labels in
 library(DeepCC)
 
 # get functional spectra from gene expression profiles
-# use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
 fs <- getFunctionalSpectra(eps)
 
 # train DeepCC model
-# use parameter "cores" to indicate how many cpu cores you what to use, by defaut DeepCC will use all your cores - 1.
 deepcc.model <- trainDeepCCModel(fs, labels)
 
 # obtain deep features
@@ -65,4 +61,4 @@ Note: if your single sample is microarray data, we strongly suggest you turn the
 
 ## Additional tools
 - `cross_validataion` performs cross validation.
-
+- `get_gene_sets` get gene sets list from MSigDB.
