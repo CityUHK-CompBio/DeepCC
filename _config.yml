@@ -1,0 +1,8 @@
+title: DeepCC
+description: a deep learning-based framework for cancer classification
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-architect
+
+gems:
+  - jekyll-mentions
