@@ -37,4 +37,3 @@ getFunctionalSpectrum(ep, refExp = "COADREAD")
 \seealso{
 \code{\link{getFunctionalSpectra}} for a batch of gene expression profiles.
 }
-

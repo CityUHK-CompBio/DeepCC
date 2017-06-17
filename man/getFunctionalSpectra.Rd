@@ -26,4 +26,3 @@ getFunctionalSpectra(eps)
 \seealso{
 \code{\link{getFunctionalSpectrum}} for a single gene expression profile.
 }
-

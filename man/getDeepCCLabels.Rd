@@ -22,4 +22,3 @@ This function classifys new data set using trained DeepCC model.
 \examples{
 getDeepCCLabels(deepcc.model, newdata.fs)
 }
-

@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' trainDeepCCModel(tcga.fs, tcga.labels)
-trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120,30,10), gpus = 0) {
+trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120,30,10), gpus = 0, round = 30, optimizer = "sgd") {
   fs <- data.matrix(trainData[!is.na(trainLabels), ])
   labels <- as.factor(na.omit(trainLabels))
   levels <- levels(labels)
@@ -21,18 +21,28 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
     device  <- mx.cpu()
     }
 
+  # para <- switch(optimizer, sgd = {
+  #   list(learning.rate=0.01,
+  #        momentum=0.9,
+  #        optimizer = "sgd")
+  # }, adadelta = {
+  #   list(optimizer = "adadelta")
+  # }, list(learning.rate=0.01,
+  #         momentum=0.9,
+  #         optimizer = "sgd"))
+
   classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
                                hidden_node=hiddenLayers, out_node=length(levels),
-                               out_activation="softmax", num.round=30, eval.metric=mx.metric.accuracy,
+                               out_activation="softmax", num.round=round, eval.metric=mx.metric.accuracy,
                                learning.rate=0.01,
                                momentum=0.9,
-                               optimizer = "sgd",
+                               optimizer = optimizer,
                                # optimizer = "adadelta", # adadelta is also good, w/o pre-setting learning rate and momentum
                                activation = "tanh",
                                initializer = mx.init.Xavier(),
                                device = device)
 
-  list(classifier=classifier, levels=levels)
+  list(classifier=mx.serialize(classifier), levels=levels)
 }
 
 #' Get DeepCC Labels

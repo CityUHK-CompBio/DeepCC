@@ -22,4 +22,3 @@ This function performs cross validation of DeepCC Mode on the training data.
 \examples{
 cross_validataion(tcga.fs, tcga.labels)
 }
-

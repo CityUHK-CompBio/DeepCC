@@ -18,4 +18,3 @@ This function extract a list of gene sets from gmt file.
 \examples{
 msigdbv51 <- get_gene_sets("msigdb.v5.1.entrez.gmt")
 }
-

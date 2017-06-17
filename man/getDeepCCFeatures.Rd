@@ -20,4 +20,3 @@ This function obtains DeepCC Features from functional spectra.
 \examples{
 getDeepCCFeatures(deepcc.model, fs)
 }
-

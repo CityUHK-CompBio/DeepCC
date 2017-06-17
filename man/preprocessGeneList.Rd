@@ -18,4 +18,3 @@ This function preprocess gene list for futhur process.
 \examples{
 preprocessGeneList(geneList)
 }
-
