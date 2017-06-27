@@ -17,30 +17,29 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 
   if(gpus > 0) {
     device <- lapply(0:(gpus-1), mx.gpu)
-    } else {
+  } else {
     device  <- mx.cpu()
-    }
+  }
 
-  # para <- switch(optimizer, sgd = {
-  #   list(learning.rate=0.01,
-  #        momentum=0.9,
-  #        optimizer = "sgd")
-  # }, adadelta = {
-  #   list(optimizer = "adadelta")
-  # }, list(learning.rate=0.01,
-  #         momentum=0.9,
-  #         optimizer = "sgd"))
-
-  classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
-                               hidden_node=hiddenLayers, out_node=length(levels),
-                               out_activation="softmax", num.round=round, eval.metric=mx.metric.accuracy,
-                               learning.rate=0.01,
-                               momentum=0.9,
-                               optimizer = optimizer,
-                               # optimizer = "adadelta", # adadelta is also good, w/o pre-setting learning rate and momentum
-                               activation = "tanh",
-                               initializer = mx.init.Xavier(),
-                               device = device)
+  if(optimizer == "adadelta") {
+    classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
+                                hidden_node=hiddenLayers, out_node=length(levels),
+                                out_activation="softmax", num.round=round, eval.metric=mx.metric.accuracy,
+                                optimizer = "adadelta", # adadelta is also good, w/o pre-setting learning rate and momentum
+                                activation = "tanh",
+                                initializer = mx.init.Xavier(),
+                                device = device)
+  } else {
+    classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
+                                hidden_node=hiddenLayers, out_node=length(levels),
+                                out_activation="softmax", num.round=round, eval.metric=mx.metric.accuracy,
+                                learning.rate=0.01,
+                                momentum=0.9,
+                                activation = "tanh",
+                                optimizer = "sgd",
+                                initializer = mx.init.Xavier(),
+                                device = device)
+  }
 
   list(classifier=mx.serialize(classifier), levels=levels)
 }

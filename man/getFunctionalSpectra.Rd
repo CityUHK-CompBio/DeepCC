@@ -4,8 +4,8 @@
 \alias{getFunctionalSpectra}
 \title{Generate Functional Spectra}
 \usage{
-getFunctionalSpectra(eps, geneSets = MSigDB, cores = parallel::detectCores()
-  - 1)
+getFunctionalSpectra(eps, geneSets = "MSigDBv5",
+  cores = parallel::detectCores() - 1)
 }
 \arguments{
 \item{eps}{a data.frame containing gene expression profiles (each row presents one sample)}
