@@ -78,7 +78,7 @@ getFunctionalSpectra <- function(eps, geneSets = "MSigDBv5", cores = parallel::d
 #' @export
 #' @examples
 #' getFunctionalSpectrum(ep, refExp = "COADREAD")
-getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = "MSigDBv5", refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
@@ -97,6 +97,12 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = MSigDB, refExp =
     }
   }
   geneList <- preprocessGeneList(expressionProfile)
+
+  if(geneSets == "MSigDBv5") {
+    geneSets = MSigDBv5
+  } else if(geneSets == "MSigDBv6") {
+    geneSets = MSigDBv6
+  }
 
   res <- sapply(1:length(geneSets), function(idx) calcEnrichmentScore(geneList, geneSets[[idx]]))
   names(res) <- names(geneSets)

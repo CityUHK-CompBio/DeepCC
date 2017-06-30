@@ -16,9 +16,9 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
   levels <- levels(labels)
 
   if(gpus > 0) {
-    device <- lapply(0:(gpus-1), mx.gpu)
+    device <- lapply(0:(gpus-1), mxnet::mx.gpu)
   } else {
-    device  <- mx.cpu()
+    device  <- mxnet::mx.cpu()
   }
 
   if(optimizer == "adadelta") {
@@ -41,7 +41,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
                                 device = device)
   }
 
-  list(classifier=mx.serialize(classifier), levels=levels)
+  list(classifier=mxnet::mx.serialize(classifier), levels=levels)
 }
 
 #' Get DeepCC Labels
@@ -138,7 +138,7 @@ getDeepCCFeatures <- function(DeepCCModel, fs){
     return(df)
   }
 
-  model <- DeepCCModel$classifier
+  model <- mxnet::mx.unserialize(DeepCCModel$classifier)
   layer <- length(model$symbol$get.internals()$arguments)/2 - 2
 
   predictInternal(model, fs, layer = layer, array.layout = "rowmajor", array.batch.size = 1)

@@ -4,8 +4,8 @@
 \alias{getFunctionalSpectrum}
 \title{Generate Functional Spectrum}
 \usage{
-getFunctionalSpectrum(expressionProfile, geneSets = MSigDB, refExp = NULL,
-  logChange = F, inverseRescale = F, filter = -3)
+getFunctionalSpectrum(expressionProfile, geneSets = "MSigDBv5",
+  refExp = NULL, logChange = F, inverseRescale = F, filter = -3)
 }
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
