@@ -55,7 +55,7 @@ Note: You can generate customized reference expression profile from your previou
 ### Additional tools
 - `cross_validataion` performs cross validation.
 - `get_gene_sets` get gene sets list from MSigDB.
-- `vis_sample` visulize samples
+- `vis_sample` visualize samples
 
 
 ## Pre-defined data in DeepCC

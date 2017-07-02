@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{vis_samples}
 \alias{vis_samples}
-\title{Visulization of samples}
+\title{Visualization of samples}
 \usage{
 vis_samples(data, labels, color, guide_fill = "legend")
 }
@@ -10,5 +10,5 @@ vis_samples(data, labels, color, guide_fill = "legend")
 a list containing gene sets by EntrezID
 }
 \description{
-This function visulize samples.
+This function visualize samples.
 }

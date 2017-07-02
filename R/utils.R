@@ -45,9 +45,9 @@ get_gene_sets <- function(file) {
 }
 
 
-#' Visulization of samples
+#' Visualization of samples
 #'
-#' This function visulize samples.
+#' This function visualize samples.
 #'
 #' @param data
 #' @param labels
