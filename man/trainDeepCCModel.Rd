@@ -5,7 +5,7 @@
 \title{Train DeepCC Model}
 \usage{
 trainDeepCCModel(trainData, trainLabels, hiddenLayers = c(2000, 500, 120, 30,
-  10), gpus = 0, round = 30, optimizer = "sgd")
+  10), gpus = 0, round = 30, optimizer = "sgd", seed = 1)
 }
 \arguments{
 \item{trainData}{a data.frame containing functional spectra of training data (each row presents one sample)}
