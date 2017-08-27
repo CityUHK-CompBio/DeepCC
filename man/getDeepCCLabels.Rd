@@ -4,7 +4,7 @@
 \alias{getDeepCCLabels}
 \title{Get DeepCC Labels}
 \usage{
-getDeepCCLabels(DeepCCModel, newData, cutoff = 0.5)
+getDeepCCLabels(DeepCCModel, newData, cutoff = 0.5, prob.mode = F)
 }
 \arguments{
 \item{DeepCCModel}{a trained DeepCC model}

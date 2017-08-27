@@ -57,8 +57,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
 #' @export
 #' @examples
 #' getDeepCCLabels(deepcc.model, newdata.fs)
-getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
-
+getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5, prob.mode=F){
 
   res <- predict(DeepCCModel$classifier, newData, array.layout="rowmajor")
 
@@ -67,7 +66,26 @@ getDeepCCLabels <- function(DeepCCModel, newData, cutoff=0.5){
       which.max(z)
     } else { NA }
   })
-  factor(predicted, levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
+  pred <- factor(predicted, levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
+
+  if(prob.mode) pred <- data.frame(DeepCC=as.character(pred), Probability= round(apply(res, 2, max), digits = 3))
+
+  pred
+  #predicted <- factor(apply(predict(DeepCCModel$classifier, newData, array.layout="rowmajor"), 2, which.max), levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
+}
+
+#' Get DeepCC prob mat
+#'
+#' @export
+#' @examples
+#' getDeepCCLabels(deepcc.model, newdata.fs)
+getDeepCCProb <- function(DeepCCModel, newData){
+
+  res <- t(predict(DeepCCModel$classifier, newData, array.layout="rowmajor"))
+  #res <- data.frame(t(res), check.names = F)
+  colnames(res) <- DeepCCModel$levels
+
+  res
 
   #predicted <- factor(apply(predict(DeepCCModel$classifier, newData, array.layout="rowmajor"), 2, which.max), levels=seq(length(DeepCCModel$levels)), labels=DeepCCModel$levels)
 }
