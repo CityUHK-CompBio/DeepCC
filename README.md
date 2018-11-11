@@ -3,7 +3,7 @@ DeepCC: a deep learning-based framework for cancer classification
 
 ## DeepCC Online
 
-Here is the online version of [DeepCC](http://144.214.26.67:3838/).
+Here is an online Demo of [DeepCC](http://144.214.26.67:3838/).
 
 ## Local version
 
