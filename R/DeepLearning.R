@@ -5,7 +5,7 @@
 #' @param trainData a data.frame containing functional spectra of training data (each row presents one sample)
 #' @param trainLabels a character vector containing lables of training data
 #' @param hiddenLayers a numeric vector containing hidden layers architecture
-#' @param gups a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 0)
+#' @param gpus a integer indicating how many GPUs used in parallel computing using GPUs (defaut = 0)
 #' @return a trained DeepCC model
 #' @export
 #' @examples

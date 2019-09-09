@@ -9,7 +9,7 @@ Description: DeepCC is versatile and robust cancer subtyping framework, based on
 License: MIT
 LazyData: TRUE
 RoxygenNote: 6.0.1
-Imports: mxnet, doParallel, foreach, Rcpp
+Imports: keras, doParallel, foreach, Rcpp
 URL: http://github.com/CityUHK-CompBio/DeepCC
 BugReports: http://github.com/CityUHK-CompBio/DeepCC/issues
 LinkingTo: Rcpp
