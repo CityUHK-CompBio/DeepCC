@@ -42,14 +42,14 @@ calcEnrichmentScore <- function (geneList, geneSet)
 #' @export
 #' @examples
 #' getFunctionalSpectra(eps)
-getFunctionalSpectra <- function(eps, geneSets = "MSigDBv5", cores = parallel::detectCores() - 1) {
+getFunctionalSpectra <- function(eps, geneSets = "MSigDBv5", scale = T, cores = parallel::detectCores() - 1) {
   if(geneSets == "MSigDBv5") {
     geneSets = MSigDBv5
   } else if(geneSets == "MSigDBv6") {
     geneSets = MSigDBv6
   }
 
-  eps <- scale(eps, scale = FALSE)
+  if(scale) eps <- scale(eps, scale = FALSE)
 
   doParallel::registerDoParallel(cores)
   res <- foreach(idx = 1:nrow(eps), .combine = rbind) %dopar% {
