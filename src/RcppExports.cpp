@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // calcEnrichmentScoreCPP
 double calcEnrichmentScoreCPP(IntegerVector Set, NumericVector Eso, double exponent);
-RcppExport SEXP DeepCC_calcEnrichmentScoreCPP(SEXP SetSEXP, SEXP EsoSEXP, SEXP exponentSEXP) {
+RcppExport SEXP _DeepCC_calcEnrichmentScoreCPP(SEXP SetSEXP, SEXP EsoSEXP, SEXP exponentSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"DeepCC_calcEnrichmentScoreCPP", (DL_FUNC) &DeepCC_calcEnrichmentScoreCPP, 3},
+    {"_DeepCC_calcEnrichmentScoreCPP", (DL_FUNC) &_DeepCC_calcEnrichmentScoreCPP, 3},
     {NULL, NULL, 0}
 };
 

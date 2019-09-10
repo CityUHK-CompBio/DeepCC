@@ -42,11 +42,16 @@ calcEnrichmentScore <- function (geneList, geneSet)
 #' @export
 #' @examples
 #' getFunctionalSpectra(eps)
-getFunctionalSpectra <- function(eps, geneSets = "MSigDBv5", scale = T, cores = parallel::detectCores() - 1) {
+getFunctionalSpectra <- function(eps, geneSets = "MSigDBv7", scale = T, cores = parallel::detectCores() * 0.8) {
   if(geneSets == "MSigDBv5") {
+    data(MSigDBv5)
     geneSets = MSigDBv5
   } else if(geneSets == "MSigDBv6") {
+    data(MSigDBv6)
     geneSets = MSigDBv6
+  } else if(geneSets == "MSigDBv7") {
+    data(MSigDBv7)
+    geneSets = MSigDBv7
   }
 
   if(scale) eps <- scale(eps, scale = FALSE)
@@ -99,9 +104,14 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = "MSigDBv5", refE
   geneList <- preprocessGeneList(expressionProfile)
 
   if(geneSets == "MSigDBv5") {
+    data(MSigDBv5)
     geneSets = MSigDBv5
   } else if(geneSets == "MSigDBv6") {
+    data(MSigDBv6)
     geneSets = MSigDBv6
+  } else if(geneSets == "MSigDBv7") {
+    data(MSigDBv7)
+    geneSets = MSigDBv7
   }
 
   res <- sapply(1:length(geneSets), function(idx) calcEnrichmentScore(geneList, geneSets[[idx]]))
