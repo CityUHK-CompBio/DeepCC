@@ -34,7 +34,7 @@ calcEnrichmentScore <- function (geneList, geneSet)
 #' This function generates functional spectra for given gene expression profiles.
 #'
 #' @param eps a data.frame containing gene expression profiles (each row presents one sample)
-#' @param geneSets a List containg gene sets (default: MSigDB v5.0)
+#' @param geneSets a List containg gene sets (default: MSigDB v7.0)
 #' @param cores a integer indicating cpu cores used in parallel computing (default = all cores - 1)
 #' @return a data.frame containing functional spectra
 #' @seealso \code{\link{getFunctionalSpectrum}} for a single gene expression profile.
