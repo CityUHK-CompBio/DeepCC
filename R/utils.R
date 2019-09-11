@@ -22,8 +22,8 @@ cross_validataion <- function(fs, labels, fold = 5) {
   testData.fs <- fs[testidx, ]
   testData.labels <- labels[testidx]
 
-  deepcc.model <- trainDeepCCModel(trainData.fs, trainData.labels)
-  pred.lables <- getDeepCCLabels(deepcc.model, testData.fs, 0)
+  deepcc.model <- train_DeepCC_model(trainData.fs, trainData.labels)
+  pred.lables <- get_DeepCC_label(deepcc.model, testData.fs, 0)
 
   error_rate <- 1-mean(as.character(testData.labels) == as.character(pred.lables))
   error_rate
@@ -49,11 +49,11 @@ get_gene_sets <- function(file) {
 #'
 #' This function visualize samples.
 #'
-#' @param data
-#' @param labels
-#' @param color
-#' @param guide_fill
-#' @return a list containing gene sets by EntrezID
+#' @param data data.frame
+#' @param labels groups
+#' @param color color
+#' @param guide_fill legend
+#' @return a ggolot2 object
 #' @import ggplot2 cowplot
 #' @export
 vis_samples <- function(data, labels, color, guide_fill="legend") {

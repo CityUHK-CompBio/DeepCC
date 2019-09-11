@@ -8,7 +8,7 @@ Description: DeepCC is versatile and robust cancer subtyping framework, based on
     deep learning and incorporate functional gene sets as prior knowledge.
 License: MIT
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1.9000
 Imports: keras, doParallel, foreach, Rcpp
 URL: http://github.com/CityUHK-CompBio/DeepCC
 BugReports: http://github.com/CityUHK-CompBio/DeepCC/issues

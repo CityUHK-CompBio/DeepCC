@@ -6,8 +6,17 @@
 \usage{
 vis_samples(data, labels, color, guide_fill = "legend")
 }
+\arguments{
+\item{data}{data.frame}
+
+\item{labels}{groups}
+
+\item{color}{color}
+
+\item{guide_fill}{legend}
+}
 \value{
-a list containing gene sets by EntrezID
+a ggolot2 object
 }
 \description{
 This function visualize samples.

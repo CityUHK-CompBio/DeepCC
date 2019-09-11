@@ -4,13 +4,13 @@
 \alias{getFunctionalSpectra}
 \title{Generate Functional Spectra}
 \usage{
-getFunctionalSpectra(eps, geneSets = "MSigDBv5",
-  cores = parallel::detectCores() - 1)
+getFunctionalSpectra(eps, geneSets = "MSigDBv7", scale = T,
+  cores = parallel::detectCores() * 0.8)
 }
 \arguments{
 \item{eps}{a data.frame containing gene expression profiles (each row presents one sample)}
 
-\item{geneSets}{a List containg gene sets (default: MSigDB v5.0)}
+\item{geneSets}{a List containg gene sets (default: MSigDB v7.0)}
 
 \item{cores}{a integer indicating cpu cores used in parallel computing (default = all cores - 1)}
 }
