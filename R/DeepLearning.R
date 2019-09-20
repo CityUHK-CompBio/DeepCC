@@ -51,7 +51,7 @@ train_DeepCC_model <- function(trainData, trainLabels, epochs = 100, dropout = 0
     epochs = epochs, batch_size = 1024,
     #callbacks = callback_tensorboard("../logs/run_deepcc"),
     view_metrics = F,
-    validation_split = 0
+    validation_split = validation_split
   )
 
   list(classifier=model, levels=levels)

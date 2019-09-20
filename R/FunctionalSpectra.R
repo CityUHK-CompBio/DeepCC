@@ -83,7 +83,7 @@ getFunctionalSpectra <- function(eps, geneSets = "MSigDBv7", scale = T, cores = 
 #' @export
 #' @examples
 #' getFunctionalSpectrum(ep, refExp = "COADREAD")
-getFunctionalSpectrum <- function(expressionProfile, geneSets = "MSigDBv5", refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = "MSigDBv7", refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
