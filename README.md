@@ -1,12 +1,6 @@
 # DeepCC
 DeepCC: a deep learning-based framework for cancer classification
 
-## DeepCC Online
-
-Here is the online version of [DeepCC](http://144.214.26.67:3838/).
-
-## Local version
-
 ### Dependencies
 DeepCC dependes on MXNet framework, supporting both multiple CPUs and GPUs. Please install MXNet first according to their instruction.
 
