@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 calcEnrichmentScoreCPP <- function(Set, Eso, exponent) {
-    .Call('DeepCC_calcEnrichmentScoreCPP', PACKAGE = 'DeepCC', Set, Eso, exponent)
+    .Call('_DeepCC_calcEnrichmentScoreCPP', PACKAGE = 'DeepCC', Set, Eso, exponent)
 }
 

@@ -30,7 +30,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
                                 optimizer = "adadelta", # adadelta is also good, w/o pre-setting learning rate and momentum
                                 activation = "tanh",
                                 initializer = mxnet::mx.init.Xavier(),
-                                device = device)
+                                ctx = device)
   } else {
     classifier <- mxnet::mx.mlp(fs, as.numeric(labels)-1, array.layout="rowmajor",
                                 hidden_node=hiddenLayers, out_node=length(levels),
@@ -40,7 +40,7 @@ trainDeepCCModel <- function(trainData, trainLabels, hiddenLayers=c(2000,500,120
                                 activation = "tanh",
                                 optimizer = "sgd",
                                 initializer = mxnet::mx.init.Xavier(),
-                                device = device)
+                                ctx = device)
   }
 
   list(classifier=mxnet::mx.serialize(classifier), levels=levels)
@@ -96,11 +96,12 @@ getDeepCCProb <- function(DeepCCModel, newData){
 #'
 #' @param DeepCCModel a trained DeepCC model
 #' @param fs a data.frame containing functional spectra (each row presents one sample)
+#' @param layer a number indicating which layer you want to extract (default: the last hidden layer)
 #' @return a data.frame containing DeepCC Features extracted from the last hidden layer
 #' @export
 #' @examples
 #' getDeepCCFeatures(deepcc.model, fs)
-getDeepCCFeatures <- function(DeepCCModel, fs){
+getDeepCCFeatures <- function(DeepCCModel, fs, layer=NULL){
 
   ## modified from fdavidcl on github
   ## ref: https://github.com/dmlc/mxnet/issues/2785
@@ -159,7 +160,9 @@ getDeepCCFeatures <- function(DeepCCModel, fs){
   }
 
   model <- mxnet::mx.unserialize(DeepCCModel$classifier)
-  layer <- length(model$symbol$get.internals()$arguments)/2 - 2
+  if(is.null(layer)) {
+    layer <- length(model$symbol$get.internals()$arguments)/2 - 2
+  }
 
   predictInternal(model, fs, layer = layer, array.layout = "rowmajor", array.batch.size = 1)
 }
