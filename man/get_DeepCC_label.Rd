@@ -4,13 +4,18 @@
 \alias{get_DeepCC_label}
 \title{Get DeepCC Labels}
 \usage{
-get_DeepCC_label(DeepCCModel, newData, cutoff = 0.5, prob.mode = F,
-  prob.raw = F)
+get_DeepCC_label(
+  DeepCCModel,
+  newData,
+  cutoff = 0.5,
+  prob.mode = F,
+  prob.raw = F
+)
 }
 \arguments{
 \item{DeepCCModel}{a trained DeepCC model}
 
-\item{newData}{a data.frame containing functional spectra of new data (each row presents one sample)}
+\item{newData}{a data.frame containing functional spectra of new data (each presnets one sample)}
 
 \item{cutoff}{a numeric indicating cutoff of poster probability}
 }

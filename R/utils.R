@@ -8,23 +8,23 @@
 #' @return a numeric indicating error rate in a single run
 #' @export
 #' @examples
-#' cross_validataion(tcga.fs, tcga.labels)
-cross_validataion <- function(fs, labels, fold = 5) {
+#' cross_validation(tcga.fs, tcga.labels)
+cross_validation <- function(fs, labels, fold = 5) {
   fs <- fs[!is.na(labels), ]
   labels <- na.omit(labels)
-
+  
   n <- length(labels)
   testidx <- sample(n, n*(1/fold))
-
+  
   trainData.fs <- fs[-testidx, ]
   trainData.labels <- labels[-testidx]
-
+  
   testData.fs <- fs[testidx, ]
   testData.labels <- labels[testidx]
-
+  
   deepcc.model <- train_DeepCC_model(trainData.fs, trainData.labels)
   pred.lables <- get_DeepCC_label(deepcc.model, testData.fs, 0)
-
+  
   error_rate <- 1-mean(as.character(testData.labels) == as.character(pred.lables))
   error_rate
 }
@@ -61,21 +61,21 @@ vis_samples <- function(data, labels, color, guide_fill="legend") {
     ranx <- range(x, na.rm = na.rm)
     (x - ranx[1]) / diff(ranx)
   }
-
+    
   calcAvgSilhouetteWidth <- function(data, labels) {
     data <- data[!is.na(labels), ]
     labels <- na.omit(labels)
     labels <- as.numeric(as.factor(labels))
     summary(cluster:::silhouette.default.R(labels, dist(data)))$avg.width
   }
-
+  
   asw <- calcAvgSilhouetteWidth(data, labels)
   asw_df <- data.frame(x=0.8, y=-0.1, label=paste("ASW =", round(asw, 3)))
-
+  
   pc <- prcomp(data)
   r2 <- data.frame(PC1=normalise(pc$x[,1]), PC2=normalise(pc$x[,2]), Class=factor(labels))
   r2 <- r2[!is.na(r2$Class), ]
-
+  
   ggplot(r2, aes(fill=Class, x=PC1, y=PC2)) +
     stat_density2d(geom="tile", aes(x=PC1, y=PC2, alpha=..density..), contour=F, h=c(0.3, 0.3)) +
     scale_alpha_continuous(range = c(0, 1), guide=F) +

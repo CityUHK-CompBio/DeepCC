@@ -4,8 +4,14 @@
 \alias{train_DeepCC_model}
 \title{Train DeepCC Model}
 \usage{
-train_DeepCC_model(trainData, trainLabels, epochs = 100, dropout = 0.5,
-  activation_func = "selu")
+train_DeepCC_model(
+  trainData,
+  trainLabels,
+  epochs = 60,
+  dropout = 0.4,
+  activation_func = "selu",
+  validation_split = 0.2
+)
 }
 \arguments{
 \item{trainData}{a data.frame containing functional spectra of training data (each row presents one sample)}
@@ -16,7 +22,7 @@ train_DeepCC_model(trainData, trainLabels, epochs = 100, dropout = 0.5,
 
 \item{dropout}{dropout rate}
 
-\item{activation_func}{activation function}
+\item{activation_func}{activation funtion}
 }
 \value{
 a trained DeepCC model

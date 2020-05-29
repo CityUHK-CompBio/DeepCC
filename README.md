@@ -2,7 +2,7 @@
 DeepCC: a deep learning-based framework for cancer classification
 
 ### Dependencies
-DeepCC dependes on MXNet framework, supporting both multiple CPUs and GPUs. Please install MXNet first according to their instruction.
+This branch DeepCC dependes on keras framework, supporting only multiple CPUs currently. Please install [keras](https://keras.rstudio.com/) in R first accroding to the instruction.
 
 ### Installation
 You can install DeepCC from GitHub directly using devtools.
@@ -10,7 +10,6 @@ You can install DeepCC from GitHub directly using devtools.
 install.packages("devtools")
 devtools::install_github("CityUHK-CompBio/DeepCC")
 ```
-
 ### Quick start
 As a case study, you can obtain well organized colorectal cancer data from CRCSC's repository on [Synapse](https://www.synapse.org/#!Synapse:syn2623706/wiki/).
 
@@ -21,45 +20,51 @@ DeepCC only need two input for start.
 Now assume you have the gene expression profiles in `eps` and training labels in `labels`.
 ```
 library(DeepCC)
+library(keras)
 
-# get functional spectra from gene expression profiles
+# get functional spectra from gene expression profiles and the geneSets will use MSigDBv6 by default. Add parameter `geneSets = MSigDBvx` (x = 5/6/7) for different version of MSigDB.
 fs <- getFunctionalSpectra(eps)
 
 # train DeepCC model
-deepcc.model <- trainDeepCCModel(fs, labels)
+deepcc.model <- train_DeepCC_model(fs, labels)
 
-# obtain deep features
-df <- getDeepCCFeatures(deepcc.model, fs)
+# obtain deep features 
+df <- get_DeepCC_features(deepcc.model, fs)
 ```
 
 After training, now you can use your DeepCC model to classify new sample(s). DeepCC can classify samples in a data set, as well as individual samples. The input data should be in the same format as above gene expression profile(s).
 
 ```
-# classify new data set used trained DeepCC model
+# classify new data set use trained DeepCC model
 # for a batch of samples
 new.fs <- getFunctionalSpectra(new.eps)
-pred.lables <- getDeepCCLabels(deepcc.model, new.fs)
+pred.labels <- get_DeepCC_label(deepcc.model, new.fs)
 
 # for a given single sample, you have to provide a reference expression profile.
-new.fs <- getFunctionalSpectrum(new.ep, refExp = "COADREAD")
-pred.lable <- getDeepCCLabels(deepcc.model, new.fs)
+new.fs_single <- getFunctionalSpectrum(new.ep, refExp = "COADREAD")
+pred.label <- get_DeepCC_label(deepcc.model, new.fs_single)
 ```
-Note: You can generate customized reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform. Alternatively, you can use pre-defined reference in DeepCC by passing the cancer type (in the format of TCGA cancer types).
+Note: You can generate customized reference expression profile from your previous data or public data, which is the same(similar) cancer type and platform. Alternatively, you can use pre-defined reference in DeepCC by passing the cancer type (in the format of TCGA cancer types)
 
 ### Additional tools
-- `cross_validataion` performs cross validation.
+- `cross_validattion` performs cross validation.
 - `get_gene_sets` get gene sets list from MSigDB.
 - `vis_sample` visualize samples
-
-
+```
+#use the deep feature for visualization of classification. 
+#Assume deep feature stored in df, labels gotten form `get_DeepCC_label` stored in labels, 
+#and color defined by yourself which should have the same length with the levels of labels.
+library(ggplot2)
+library(cowplot)
+theme_set(theme_cowplot())
+vis_samples(df, labels, color)
+```
 ## Pre-defined data in DeepCC
 
-### List of functional gene sets
-By default, DeepCC will use MSigDB v5.0 (10, 348 gene sets) to generate functional spectra. You can also use MSigDB v6.0  (17, 779 gene sets).
+### List of functional gene DeepCC
+By default, DeepCC will use MSigDB v6.0 (17, 779 gene sets) to generate functional spectra. You can also use MSigDB v5.0 (10, 348 gene sets) and MSigDB v7.0 (22, 596 gene sets).
 
 ### Pre-defined reference
-In DeepCC we prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
+In DeepCC we prepared average expression profiles of each cancer types in TCGA project as reference. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
 
-Note: if your single sample is microarray data, we strongly suggest you turn the parameter `inverseRescale` on, since TCGA is RNA-Seq data, which has very small expression value for low expressed genes, compared with microarray. `inverseRescale` can overcome this distribution different a little bit, but it's better to generate your customized reference.
-
-
+Note: if your single sample is microarray data, we strongly suggest you turn the parameter `inverseRescale` on, since TCGA is RNA-Seq data, compared with microarray. `inverseRescale` can overcome this distribution differently a little bit, but it's better to generate your customized reference.
