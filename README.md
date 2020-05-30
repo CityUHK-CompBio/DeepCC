@@ -1,8 +1,12 @@
 # DeepCC
 DeepCC: a deep learning-based framework for cancer classification
 
+### Updata
+Add supporting of deep learning with keras framework.
+Improve the deep learing netwrok for better convergence.
+
 ### Dependencies
-This branch DeepCC dependes on keras framework, supporting only multiple CPUs currently. Please install [keras](https://keras.rstudio.com/) in R first accroding to the instruction.
+This branch DeepCC dependes on keras framework, supporting multiple CPUs GPUs. Please install [keras](https://keras.rstudio.com/) in R first accroding to the instruction and make sure that keras able to run correctly.
 
 ### Installation
 You can install DeepCC from GitHub directly using devtools.
@@ -26,10 +30,10 @@ library(keras)
 fs <- getFunctionalSpectra(eps)
 
 # train DeepCC model
-deepcc.model <- train_DeepCC_model(fs, labels)
+deepcc_model <- train_DeepCC_model(fs, labels)
 
 # obtain deep features 
-df <- get_DeepCC_features(deepcc.model, fs)
+df <- get_DeepCC_features(deepcc_model, fs)
 ```
 
 After training, now you can use your DeepCC model to classify new sample(s). DeepCC can classify samples in a data set, as well as individual samples. The input data should be in the same format as above gene expression profile(s).
@@ -37,12 +41,12 @@ After training, now you can use your DeepCC model to classify new sample(s). Dee
 ```
 # classify new data set use trained DeepCC model
 # for a batch of samples
-new.fs <- getFunctionalSpectra(new.eps)
-pred.labels <- get_DeepCC_label(deepcc.model, new.fs)
+new_fs <- getFunctionalSpectra(new_eps)
+pred_labels <- get_DeepCC_label(deepcc_model, new_fs)
 
 # for a given single sample, you have to provide a reference expression profile.
-new.fs_single <- getFunctionalSpectrum(new.ep, refExp = "COADREAD")
-pred.label <- get_DeepCC_label(deepcc.model, new.fs_single)
+new_fs_single <- getFunctionalSpectrum(new_ep, refExp = "COADREAD")
+pred_label <- get_DeepCC_label(deepcc_model, new_fs_single)
 ```
 Note: You can generate customized reference expression profile from your previous data or public data, which is the same(similar) cancer type and platform. Alternatively, you can use pre-defined reference in DeepCC by passing the cancer type (in the format of TCGA cancer types)
 
