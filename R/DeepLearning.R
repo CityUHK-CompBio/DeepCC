@@ -46,7 +46,7 @@ train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.
   model %>% compile(
     loss = loss_categorical_crossentropy,
     #optimizer = optimizer_sgd(lr = 0.008, momentum = 0.9),
-    optimizer_adam(lr=0.001, beta_1=0.9, beta_2=0.999),
+    optimizer_adam(lr=0.001, beta_1=0.9, beta_2=0.999, decay = 1e-06),
     metrics = c('accuracy')
   )
 
@@ -60,7 +60,7 @@ train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.
 
   model %>% compile(
     loss = loss_categorical_crossentropy,
-    optimizer = optimizer_sgd(lr = 0.005, momentum = 0.9, decay = 1e-05),
+    optimizer = optimizer_sgd(lr = 0.00001, momentum = 0.9, decay = 1e-07),
     #optimizer_adam(lr=0.0001, beta_1=0.9, beta_2=0.999, decay = 1e-04),
     metrics = c('accuracy')
   )
