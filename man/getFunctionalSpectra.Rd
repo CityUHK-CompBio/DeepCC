@@ -6,7 +6,7 @@
 \usage{
 getFunctionalSpectra(
   eps,
-  geneSets = "MSigDBv6",
+  geneSets = "MSigDBv7",
   scale = T,
   cores = parallel::detectCores() - 2
 )
