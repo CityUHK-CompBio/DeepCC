@@ -81,6 +81,7 @@ save_DeepCC_model <- function(deepcc_model, prefix) {
   save(levels, file = paste0(prefix, ".RData"))
 }
 
+
 #' @export
 load_DeepCC_model <- function(prefix){
   load(file = paste0(prefix, ".RData"))
