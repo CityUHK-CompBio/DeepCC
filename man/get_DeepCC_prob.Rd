@@ -10,5 +10,5 @@ get_DeepCC_prob(DeepCCModel, newData)
 Get DeepCC prob mat
 }
 \examples{
-getDeepCCLabels(deepcc.model, newdata.fs)
+getDeepCCLabels(deepcc_model, newdata_fs)
 }
