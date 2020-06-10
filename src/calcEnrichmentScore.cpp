@@ -9,6 +9,10 @@ double calcEnrichmentScoreCPP(IntegerVector Set, NumericVector Eso, double expon
   int N=sset.size();
   int nh=std::accumulate(sset.begin(), sset.end(), 0.0);
 
+  if(nh == 0) {
+    return 0;
+  }
+
   double n=(-1.0)/((double)(N-nh));
   double nr=0;
 
@@ -17,10 +21,6 @@ double calcEnrichmentScoreCPP(IntegerVector Set, NumericVector Eso, double expon
       // nr += (eso[j] > 0 ? eso[j] : -eso[j]);
       nr += std::pow((eso[j] > 0 ? eso[j] : -eso[j]), exponent);
     }
-  }
-
-  if(nh == 0) {
-    return 0;
   }
 
   double smax=0; double smin=0; double cs=0;
@@ -39,3 +39,4 @@ double calcEnrichmentScoreCPP(IntegerVector Set, NumericVector Eso, double expon
   }
   return std::abs(smax) > std::abs(smin) ? smax : smin;
 }
+

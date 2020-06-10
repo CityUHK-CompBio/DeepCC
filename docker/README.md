@@ -1,10 +1,10 @@
 # DeepCC Docker
 
-We have compiled Docker container for RStudio server with DeepCC. This is the deep leraning algorithm that help classify cancer type ([See Gao, et al. Oncogenesis, 2019](https://www.nature.com/articles/s41389-019-0157-8))
+We have compiled Docker container for RStudio server with DeepCC. This is the deep learning algorithm that help classify cancer type ([See Gao, et al. Oncogenesis, 2019](https://www.nature.com/articles/s41389-019-0157-8))
 
 The base image is from `rocker/ml:3.6.0` 
 
-With additional installation of R "DeepCC" library
+With additional installation of R "DeepCC" library (MXNet version)
 
 ## To compile/build the container
 

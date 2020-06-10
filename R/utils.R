@@ -8,24 +8,24 @@
 #' @return a numeric indicating error rate in a single run
 #' @export
 #' @examples
-#' cross_validataion(tcga.fs, tcga.labels)
-cross_validataion <- function(fs, labels, fold = 5) {
+#' cross_validation(tcga_fs, tcga_labels)
+cross_validation <- function(fs, labels, fold = 5) {
   fs <- fs[!is.na(labels), ]
   labels <- na.omit(labels)
 
   n <- length(labels)
   testidx <- sample(n, n*(1/fold))
 
-  trainData.fs <- fs[-testidx, ]
-  trainData.labels <- labels[-testidx]
+  trainData_fs <- fs[-testidx, ]
+  trainData_labels <- labels[-testidx]
 
-  testData.fs <- fs[testidx, ]
-  testData.labels <- labels[testidx]
+  testData_fs <- fs[testidx, ]
+  testData_labels <- labels[testidx]
 
-  deepcc.model <- trainDeepCCModel(trainData.fs, trainData.labels)
-  pred.lables <- getDeepCCLabels(deepcc.model, testData.fs, 0)
+  deepcc_model <- train_DeepCC_model(trainData_fs, trainData_labels)
+  pred_lables <- get_DeepCC_label(deepcc_model, testData_fs, 0)
 
-  error_rate <- 1-mean(as.character(testData.labels) == as.character(pred.lables))
+  error_rate <- 1-mean(as.character(testData_labels) == as.character(pred_lables))
   error_rate
 }
 
@@ -49,13 +49,14 @@ get_gene_sets <- function(file) {
 #'
 #' This function visualize samples.
 #'
-#' @param data
-#' @param labels
-#' @param color
-#' @param guide_fill
-#' @return a list containing gene sets by EntrezID
+#' @param data data.frame
+#' @param labels groups
+#' @param color color
+#' @param guide_fill legend
+#' @return a ggolot2 object
 #' @import ggplot2 cowplot
 #' @export
+#' @examples
 vis_samples <- function(data, labels, color, guide_fill="legend") {
   normalise <- function(x, na.rm = TRUE) {
     ranx <- range(x, na.rm = na.rm)

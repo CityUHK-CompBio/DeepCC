@@ -4,15 +4,21 @@
 \alias{getFunctionalSpectrum}
 \title{Generate Functional Spectrum}
 \usage{
-getFunctionalSpectrum(expressionProfile, geneSets = "MSigDBv5",
-  refExp = NULL, logChange = F, inverseRescale = F, filter = -3)
+getFunctionalSpectrum(
+  expressionProfile,
+  geneSets = "MSigDBv7",
+  refExp = NULL,
+  logChange = F,
+  inverseRescale = F,
+  filter = -3
+)
 }
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
 
-\item{geneSets}{a List containg gene sets (default: MSigDB v5.0)}
+\item{geneSets}{a List containing gene sets (default: MSiDB v6)}
 
-\item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector containing reference expression}
+\item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector reference expression}
 
 \item{logChange}{a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)}
 

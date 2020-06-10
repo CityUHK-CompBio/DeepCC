@@ -10,10 +10,10 @@ preprocessGeneList(geneList)
 \item{geneList}{a named vector containing the value of gene expression}
 }
 \value{
-a named vector containing the value of gene expression
+a named vecter containing the value of gene expression
 }
 \description{
-This function preprocess gene list for futhur process.
+This function preprocess gene list for futhur process
 }
 \examples{
 preprocessGeneList(geneList)

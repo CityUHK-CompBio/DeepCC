@@ -1,15 +1,21 @@
 Package: DeepCC
 Type: Package
 Title: DeepCC: a deep learning-based framework for cancer classification
-Version: 0.3.0.9000
-Author: Feng Gao, Xin Wang
+Version: 0.1.1
+Author: Feng Gao, Chenghang Li, Xin Wang
 Maintainer: Feng Gao <gaofeng21cn@gmail.com>
 Description: DeepCC is versatile and robust cancer subtyping framework, based on
     deep learning and incorporate functional gene sets as prior knowledge.
 License: MIT
-LazyData: TRUE
-RoxygenNote: 6.0.1
-Imports: mxnet, doParallel, foreach, Rcpp
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 3.2)
+RoxygenNote: 7.1.0
 URL: http://github.com/CityUHK-CompBio/DeepCC
-BugReports: http://github.com/CityUHK-CompBio/DeepCC/issues
-LinkingTo: Rcpp
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp, keras, doParallel, foreach, ggplot2, cowplot
+Suggest:
+    msigdbr
