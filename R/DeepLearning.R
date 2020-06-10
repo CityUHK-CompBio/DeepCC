@@ -10,7 +10,7 @@
 #' @return a trained DeepCC model
 #' @export
 #' @examples
-#' train_DeepCC_model(tcga.fs, tcga.labels)
+#' train_DeepCC_model(tcga_fs, tcga_labels)
 train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.4, activation_func = "selu", validation_split = 0.2){
 
   ind <- !is.na(trainLabels)
@@ -99,7 +99,7 @@ load_DeepCC_model <- function(prefix){
 #' @return a character vector containing lables of training data
 #' @export
 #' @examples
-#' get_DeepCC_label(deepcc.model, newdata.fs)
+#' get_DeepCC_label(deepcc_model, newdata_fs)
 get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, prob_raw = F)
 {
   res <- keras::predict_proba(DeepCCModel$classifier, newData)
@@ -129,7 +129,7 @@ get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, 
 #'
 #' @export
 #' @examples
-#' getDeepCCLabels(deepcc.model, newdata.fs)
+#' getDeepCCLabels(deepcc_model, newdata_fs)
 get_DeepCC_prob <- function(DeepCCModel, newData){
 
   res <- keras::predict_proba(DeepCCModel$classifier, newData)
@@ -147,7 +147,7 @@ get_DeepCC_prob <- function(DeepCCModel, newData){
 #' @return a data.frame containing DeepCC Features extracted from the last hidden layer
 #' @export
 #' @examples
-#' getDeepCCFeatures(deepcc.model, fs)
+#' getDeepCCFeatures(deepcc_model, fs)
 get_DeepCC_features <- function(DeepCCModel, fs) {
 
   model <- DeepCCModel$classifier
