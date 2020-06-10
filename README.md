@@ -1,6 +1,9 @@
 # DeepCC
 DeepCC: a deep learning-based framework for cancer classification
 
+### Attention
+In this branch, DeepCC model trains on MXNET. As Keras based on tensorflow is supported in R, the base branch will change to keras. So updating for this branch will stop.
+
 ### Dependencies
 DeepCC dependes on MXNet framework, supporting both multiple CPUs and GPUs. Please install MXNet first according to their instruction.
 
