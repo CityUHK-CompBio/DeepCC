@@ -20,5 +20,5 @@ a numeric indicating error rate in a single run
 This function performs cross validation of DeepCC Mode on the training data.
 }
 \examples{
-cross_validation(tcga.fs, tcga.labels)
+cross_validation(tcga_fs, tcga_labels)
 }
