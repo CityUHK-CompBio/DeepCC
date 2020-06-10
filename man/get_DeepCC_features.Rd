@@ -18,5 +18,5 @@ a data.frame containing DeepCC Features extracted from the last hidden layer
 This function obtains DeepCC Features form functional spectra
 }
 \examples{
-getDeepCCFeatures(deepcc.model, fs)
+getDeepCCFeatures(deepcc_model, fs)
 }
