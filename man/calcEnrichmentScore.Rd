@@ -17,3 +17,6 @@ a numeric indicating enrichment score
 \description{
 This function calculates enrichment score of a gene list on a specific gene set.
 }
+\examples{
+calcEnrichmentScore(geneList, geneSet)
+}
