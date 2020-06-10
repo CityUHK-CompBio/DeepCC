@@ -31,5 +31,5 @@ a trained DeepCC model
 This function trains DeepCC Model on the training data.
 }
 \examples{
-train_DeepCC_model(tcga.fs, tcga.labels)
+train_DeepCC_model(tcga_fs, tcga_labels)
 }
