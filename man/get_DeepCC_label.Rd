@@ -8,8 +8,8 @@ get_DeepCC_label(
   DeepCCModel,
   newData,
   cutoff = 0.5,
-  prob.mode = F,
-  prob.raw = F
+  prob_mode = F,
+  prob_raw = F
 )
 }
 \arguments{
@@ -26,5 +26,5 @@ a character vector containing lables of training data
 This function classifys new data set using trained DeepCC model.
 }
 \examples{
-get_DeepCC_label(deepcc.model, newdata.fs)
+get_DeepCC_label(deepcc_model, newdata_fs)
 }
