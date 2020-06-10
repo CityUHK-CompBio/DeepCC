@@ -45,7 +45,6 @@ train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.
 
   model %>% compile(
     loss = loss_categorical_crossentropy,
-    #optimizer = optimizer_sgd(lr = 0.008, momentum = 0.9),
     optimizer_adam(lr=0.001, beta_1=0.9, beta_2=0.999, decay = 1e-06),
     metrics = c('accuracy')
   )
@@ -60,8 +59,7 @@ train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.
 
   model %>% compile(
     loss = loss_categorical_crossentropy,
-    optimizer = optimizer_sgd(lr = 0.00001, momentum = 0.9, decay = 1e-07),
-    #optimizer_adam(lr=0.0001, beta_1=0.9, beta_2=0.999, decay = 1e-04),
+    optimizer = optimizer_sgd(lr = 1e-05, momentum = 0.9, decay = 1e-07),
     metrics = c('accuracy')
   )
 
@@ -102,7 +100,7 @@ load_DeepCC_model <- function(prefix){
 #' @export
 #' @examples
 #' get_DeepCC_label(deepcc.model, newdata.fs)
-get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob.mode = F, prob.raw = F)
+get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, prob_raw = F)
 {
   res <- keras::predict_proba(DeepCCModel$classifier, newData)
   predicted <- apply(res, 1, function(z){
@@ -115,12 +113,12 @@ get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob.mode = F, 
   })
   pred <- factor(predicted, levels = seq(length(DeepCCModel$levels)),
                  labels = DeepCCModel$levels)
-  if (prob.mode) {
+  if (prob_mode) {
     pred <- data.frame(DeepCC = as.character(pred),
                        Probability = round(apply(res, 1, max), digits =3))
   }
 
-  if (prob.mode & prob.raw) {
+  if (prob_mode & prob_raw) {
     pred <- res
   }
 
