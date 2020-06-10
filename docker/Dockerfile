@@ -28,4 +28,4 @@ RUN install2.r \
   xgboost cowplot
 
 RUN installGithub.r \
-  "CityUHK-CompBio/DeepCC"
+  "hypotheses/DeepCC"
