@@ -22,7 +22,7 @@ preprocessGeneList <- function(geneList) {
 #' @useDynLib DeepCC
 #' @import Rcpp
 #' @export
-#' @example
+#' @examples
 #' calcEnrichmentScore(geneList, geneSet)
 calcEnrichmentScore <- function(geneList, geneSet)
 {
@@ -42,7 +42,7 @@ calcEnrichmentScore <- function(geneList, geneSet)
 #' @export
 #' @examples
 #' getFunctionalSpectra(eps)
-getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv6', scale = T, cores = parallel::detectCores() - 2) {
+getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = T, cores = parallel::detectCores() - 2) {
   if (geneSets == 'MSigDBv5') {
     data(MSigDBv5)
     geneSets = MSigDBv5
@@ -83,7 +83,7 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv6', scale = T, cores = 
 #' @export
 #' @examples
 #' getFunctionalSpectrum(ep, refExp = "COADREAD")
-getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv6', refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv7', refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
