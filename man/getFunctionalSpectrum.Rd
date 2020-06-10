@@ -6,7 +6,7 @@
 \usage{
 getFunctionalSpectrum(
   expressionProfile,
-  geneSets = "MSigDBv6",
+  geneSets = "MSigDBv7",
   refExp = NULL,
   logChange = F,
   inverseRescale = F,
