@@ -1,12 +1,14 @@
 # DeepCC
-DeepCC: a deep learning-based framework for cancer classification
+DeepCC: a novel deep learning-based framework for cancer molecular subtype classification
+
+([See Gao, et al. Oncogenesis, 2019](https://www.nature.com/articles/s41389-019-0157-8))
 
 ### Updata
-Add supporting of deep learning with keras framework.
-Improve the deep learing netwrok for better convergence.
+- Added supporting of deep learning with keras framework.
+- Modified the deep netwrok architecture for better performance.
 
 ### Dependencies
-This branch DeepCC dependes on keras framework, supporting multiple CPUs and GPUs. Please install [keras](https://keras.rstudio.com/) in R first accroding to the instruction and make sure that keras able to run correctly.
+The current version of DeepCC dependes on keras framework, with CPU and GPU supporting. Please install [keras](https://keras.rstudio.com/) in R first accroding to the instruction and make sure that keras able to run correctly.
 
 ### Installation
 You can install DeepCC from GitHub directly using devtools.
