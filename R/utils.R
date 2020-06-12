@@ -57,6 +57,7 @@ get_gene_sets <- function(file) {
 #' @import ggplot2 cowplot
 #' @export
 #' @examples
+#' sample_plot <- vis_samples(df, labels, color)
 vis_samples <- function(data, labels, color, guide_fill="legend") {
   normalise <- function(x, na.rm = TRUE) {
     ranx <- range(x, na.rm = na.rm)
