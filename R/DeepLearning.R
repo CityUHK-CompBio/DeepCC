@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' train_DeepCC_model(tcga_fs, tcga_labels)
-train_DeepCC_model <- function(trainData, trainLabels, epochs = 60, dropout = 0.4, activation_func = "selu", validation_split = 0.2){
+train_DeepCC_model <- function(trainData, trainLabels, epochs = 100, dropout = 0.4, activation_func = "selu", validation_split = 0.2){
 
   ind <- !is.na(trainLabels)
   x_train <- trainData[ind, ]
