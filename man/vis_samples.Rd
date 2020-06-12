@@ -21,3 +21,6 @@ a ggolot2 object
 \description{
 This function visualize samples.
 }
+\examples{
+sample_plot <- vis_samples(df, labels, color)
+}
