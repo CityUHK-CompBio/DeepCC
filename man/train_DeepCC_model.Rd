@@ -7,7 +7,7 @@
 train_DeepCC_model(
   trainData,
   trainLabels,
-  epochs = 60,
+  epochs = 100,
   dropout = 0.4,
   activation_func = "selu",
   validation_split = 0.2
