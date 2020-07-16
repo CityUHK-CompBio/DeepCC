@@ -55,7 +55,9 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = T, cores = 
   }
 
   if(scale) eps <- scale(eps, scale = FALSE)
-
+  if(cores > 10) {
+    cores = 10
+  }
   doParallel::registerDoParallel(cores)
   res <- foreach(idx = 1:nrow(eps), .combine = rbind) %dopar% {
     geneList <- preprocessGeneList(eps[idx, ])
