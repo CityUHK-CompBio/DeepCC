@@ -66,7 +66,18 @@ theme_set(theme_cowplot())
 vis_samples(df, labels, color)
 ```
 ## Pre-defined data in DeepCC
-
+### Colorectal cancer model trained with public data sets.
+Provide Colorectal cancer DeepCC model used in DeepCC_online. One is trainded with TCGA-COADREAD data set with 626 samples. Another is trainded with the following data sets: TCGA(626), GSE13067(73), GSE13294(155), GSE14333(157), GSE17536(174), GSE20916(90), GSE2109(287), GSE35896(62), GSE37892(127), GSE39582(557), KFSYSCC(305), GSE33113(90), GSE42284(188).
+```
+# baidunetdisk
+Link: https://pan.baidu.com/s/10ogQPsNa4SksJadT8_ceHA  
+Password: ugeg
+```
+All DeepCC models used in DeepCC_online are available in [github](https://github.com/zero19970/deepcc_model):
+```
+# use git in terminal
+git clone git@github.com:zero19970/deepcc_model.git
+```
 ### List of functional gene DeepCC
 By default, DeepCC will use MSigDB v7 (22, 596 gene sets) to generate functional spectra. You can also use MSigDB v5.0 (10, 348 gene sets) and MSigDB v7.0 (17, 779 gene sets).
 ```
