@@ -66,8 +66,8 @@ theme_set(theme_cowplot())
 vis_samples(df, labels, color)
 ```
 ## Pre-defined data in DeepCC
-### Colorectal cancer model trained with public data sets
-Provide Colorectal cancer DeepCC model used in DeepCC_online. One is trainded with TCGA-COADREAD data set with 626 samples. Another is trainded with the following data sets: TCGA(626), GSE13067(73), GSE13294(155), GSE14333(157), GSE17536(174), GSE20916(90), GSE2109(287), GSE35896(62), GSE37892(127), GSE39582(557), KFSYSCC(305), GSE33113(90), GSE42284(188).
+### Colorectal cancer model trained with public data sets 
+Provide Colorectal cancer DeepCC model used in DeepCC_online. One is trainded with TCGA-COADREAD data set with 626 samples. Another is trainded with CRCSC data sets. (**Version: 20200901_v0.1.1**)
 
 #### baidunetdisk
 Link: [https://pan.baidu.com/s/10ogQPsNa4SksJadT8_ceHA](https://pan.baidu.com/s/10ogQPsNa4SksJadT8_ceHA)   &nbsp;&nbsp;&nbsp;&nbsp; Password: ugeg
