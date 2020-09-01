@@ -72,6 +72,17 @@ Provide Colorectal cancer DeepCC model used in DeepCC_online. One is trainded wi
 #### baidunetdisk
 Link: [https://pan.baidu.com/s/10ogQPsNa4SksJadT8_ceHA](https://pan.baidu.com/s/10ogQPsNa4SksJadT8_ceHA)   &nbsp;&nbsp;&nbsp;&nbsp; Password: ugeg
 
+To load CRC DeepCC model in R:
+```
+load_DeepCC_model <- function(prefix){
+  load(file = paste0(prefix, ".RData"))
+  classifer <- keras::load_model_hdf5(filepath =paste0(prefix, ".hdf5"))
+  list(classifier = classifer, levels = levels)
+}
+
+# for CRC model trained with TCGA data
+CRC_TCGA <- load_DeepCC_model("CRC_TCGA")
+```
 ### DeepCC_online models
 All DeepCC models used in DeepCC_online are available in [github](https://github.com/zero19970/deepcc_model):
 ```
