@@ -16,6 +16,11 @@ You can install DeepCC from GitHub directly using devtools.
 install.packages("devtools")
 devtools::install_github("CityUHK-CompBio/DeepCC")
 ```
+or 
+```
+install.packages("remote")
+remotes::install_github("CityUHK-CompBio/DeepCC")
+```
 ### Quick start
 As a case study, you can obtain well organized colorectal cancer data from CRCSC's repository on [Synapse](https://www.synapse.org/#!Synapse:syn2623706/wiki/).
 
