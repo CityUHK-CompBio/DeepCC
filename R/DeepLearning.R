@@ -133,7 +133,7 @@ get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, 
 #' getDeepCCLabels(deepcc_model, newdata_fs)
 get_DeepCC_prob <- function(DeepCCModel, newData){
 
-  res <- keras::predict_proba(DeepCCModel$classifier, newData)
+  res <- keras::predict(DeepCCModel$classifier, newData)
   colnames(res) <- DeepCCModel$levels
 
   res
