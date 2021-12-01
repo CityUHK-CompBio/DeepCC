@@ -103,7 +103,7 @@ load_DeepCC_model <- function(prefix){
 #' get_DeepCC_label(deepcc_model, newdata_fs)
 get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, prob_raw = F)
 {
-  res <- keras::predict_proba(DeepCCModel$classifier, newData)
+  res <- keras::predict(DeepCCModel$classifier, newData)
   predicted <- apply(res, 1, function(z){
     if (max(z) >= cutoff){
       which.max(z)
