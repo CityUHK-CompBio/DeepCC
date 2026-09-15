@@ -22,5 +22,11 @@ a ggolot2 object
 This function visualize samples.
 }
 \examples{
+\dontrun{
+set.seed(42)
+df <- as.data.frame(matrix(rnorm(30*10), nrow=30, ncol=10))
+labels <- sample(c("A", "B", "C"), 30, replace=TRUE)
+color <- c(A="red", B="blue", C="green")
 sample_plot <- vis_samples(df, labels, color)
+}
 }

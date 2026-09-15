@@ -1,94 +1,121 @@
 #' Train DeepCC Model
 #'
-#' This function trains DeepCC Model on the training data.
+#' This function trains DeepCC Model on the training data using the modern
+#' \code{keras3} interface. The network architecture, training recipe, and
+#' legacy model format are preserved from DeepCC 0.1.1.
 #'
 #' @param trainData a data.frame containing functional spectra of training data (each row presents one sample)
 #' @param trainLabels a character vector containing lables of training data
 #' @param epochs the number of epochs
 #' @param dropout dropout rate
 #' @param activation_func activation funtion
-#' @return a trained DeepCC model
+#' @param validation_split fraction of training data to use for validation
+#' @return a trained DeepCC model with \code{classifier}, \code{levels}, and
+#'   \code{feature_names} fields
 #' @export
 #' @examples
-#' train_DeepCC_model(tcga_fs, tcga_labels)
+#' \dontrun{
+#' set.seed(42)
+#' eps <- as.data.frame(matrix(rnorm(20*50), nrow=20, ncol=50))
+#' colnames(eps) <- paste0("F", seq_len(50))
+#' labels <- sample(c("A", "B", "C"), 20, replace=TRUE)
+#' deepcc_model <- train_DeepCC_model(eps, labels, epochs=2)
+#' }
 train_DeepCC_model <- function(trainData, trainLabels, epochs = 100, dropout = 0.4, activation_func = "selu", validation_split = 0.2){
+  trainData <- as.matrix(trainData)
+  feature_names <- colnames(trainData)
 
   ind <- !is.na(trainLabels)
-  x_train <- trainData[ind, ]
-  y_train <- factor(trainLabels)
+  x_train <- trainData[ind, , drop = FALSE]
+  y_train <- factor(trainLabels[ind])
   levels <- levels(y_train)
   class <- length(levels)
-  y_train <- keras::to_categorical(as.numeric(y_train[ind]) - 1, class)
+  y_train <- keras3::to_categorical(as.integer(y_train) - 1L, class)
 
-  k_clear_session()
+  keras3::clear_session()
 
   init_methods <- "glorot_uniform"
-  model <- keras_model_sequential()
-  model %>%
-    layer_dense(units = 1024, activation = activation_func, input_shape = ncol(x_train), kernel_initializer = init_methods) %>%
-    layer_batch_normalization() %>%
-    layer_gaussian_dropout(rate = dropout) %>%
-    layer_dense(units = 256, activation = activation_func, kernel_initializer = init_methods) %>%
-    layer_batch_normalization() %>%
-    layer_gaussian_dropout(rate = dropout) %>%
-    layer_dense(units = 64, activation = activation_func, kernel_initializer = init_methods) %>%
-    layer_batch_normalization() %>%
-    layer_gaussian_dropout(rate = dropout) %>%
-    layer_dense(units = 64, activation = activation_func, kernel_initializer = init_methods) %>%
-    layer_batch_normalization() %>%
-    layer_gaussian_dropout(rate = dropout) %>%
-    layer_dense(units = 10, activation = activation_func, kernel_initializer = init_methods) %>%
-    layer_batch_normalization() %>%
-    layer_gaussian_dropout(rate = dropout) %>%
-    layer_dense(units = class, activation = 'softmax')
+  model <- keras3::keras_model_sequential()
+  input_layer <- keras3::keras_input(shape = ncol(x_train))
+  output_layer <- input_layer |>
+    keras3::layer_dense(units = 1024, activation = activation_func, kernel_initializer = init_methods) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_gaussian_dropout(rate = dropout) |>
+    keras3::layer_dense(units = 256, activation = activation_func, kernel_initializer = init_methods) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_gaussian_dropout(rate = dropout) |>
+    keras3::layer_dense(units = 64, activation = activation_func, kernel_initializer = init_methods) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_gaussian_dropout(rate = dropout) |>
+    keras3::layer_dense(units = 64, activation = activation_func, kernel_initializer = init_methods) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_gaussian_dropout(rate = dropout) |>
+    keras3::layer_dense(units = 10, activation = activation_func, kernel_initializer = init_methods) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_gaussian_dropout(rate = dropout) |>
+    keras3::layer_dense(units = class, activation = 'softmax')
+  model <- keras3::keras_model(inputs = input_layer, outputs = output_layer)
 
-
-  model %>% compile(
+  model <- keras3::compile(model,
     loss = "categorical_crossentropy",
-    optimizer_adam(lr=0.001, beta_1=0.9, beta_2=0.999, decay = 1e-06),
+    optimizer = keras3::optimizer_adam(learning_rate = 0.001, beta_1 = 0.9, beta_2 = 0.999),
     metrics = c('accuracy')
   )
 
-  history <- model %>% keras::fit(
+  history <- keras3::fit(model,
     x_train, y_train,
     epochs = epochs, batch_size = 1024,
-    #callbacks = callback_tensorboard("../logs/run_deepcc"),
-    view_metrics = F,
-    validation_split = validation_split
+    validation_split = validation_split,
+    verbose = 0
   )
 
-  model %>% compile(
+  model <- keras3::compile(model,
     loss = "categorical_crossentropy",
-    optimizer = optimizer_sgd(lr = 1e-05, momentum = 0.9, decay = 1e-07),
+    optimizer = keras3::optimizer_sgd(learning_rate = 1e-05, momentum = 0.9),
     metrics = c('accuracy')
   )
 
-  history <- model %>% keras::fit(
+  history <- keras3::fit(model,
     x_train, y_train,
     epochs = epochs, batch_size = 1024,
-    #callbacks = callback_tensorboard("../logs/run_deepcc"),
-    view_metrics = F,
-    validation_split = validation_split
+    validation_split = validation_split,
+    verbose = 0
   )
 
-  list(classifier = model, levels = levels)
+  list(classifier = model, levels = levels, feature_names = feature_names)
 }
 
+#' Save DeepCC Model
+#'
+#' @param deepcc_model a trained DeepCC model
+#' @param prefix file path prefix; outputs \code{prefix.hdf5} and \code{prefix.RData}
 #' @export
 save_DeepCC_model <- function(deepcc_model, prefix) {
-  deepcc_model$classifier %>% save_model_hdf5(filepath = paste0(prefix, ".hdf5"))
-  levels = deepcc_model$levels
-  save(levels, file = paste0(prefix, ".RData"))
+  keras3::save_model(deepcc_model$classifier, paste0(prefix, ".hdf5"))
+  levels <- deepcc_model$levels
+  feature_names <- deepcc_model$feature_names
+  save(levels, feature_names, file = paste0(prefix, ".RData"))
 }
 
-
+#' Load DeepCC Model
+#'
+#' Loads a saved DeepCC model. Supports both the new format (with metadata)
+#' and the legacy 0.1.1 format (without metadata).
+#'
+#' @param prefix file path prefix
+#' @return a DeepCC model with \code{classifier}, \code{levels}, and
+#'   optionally \code{feature_names}
 #' @export
 load_DeepCC_model <- function(prefix){
   load(file = paste0(prefix, ".RData"))
-  classifer <- keras::load_model_hdf5(filepath =paste0(prefix, ".hdf5"))
-  list(classifier = classifer, levels = levels)
+  classifier <- keras3::load_model(paste0(prefix, ".hdf5"))
+  model <- list(classifier = classifier, levels = levels)
+  if (exists("feature_names", envir = environment())) {
+    fn <- get("feature_names", envir = environment())
+    if (!is.null(fn)) model$feature_names <- fn
+  }
+  model
 }
-
 
 #' Get DeepCC Labels
 #'
@@ -97,64 +124,80 @@ load_DeepCC_model <- function(prefix){
 #' @param DeepCCModel a trained DeepCC model
 #' @param newData a data.frame containing functional spectra of new data (each presnets one sample)
 #' @param cutoff a numeric indicating cutoff of poster probability
+#' @param prob_mode a logical flag; if TRUE, return a data.frame with labels and probabilities
+#' @param prob_raw a logical flag; if TRUE and prob_mode is TRUE, return the raw probability matrix
 #' @return a character vector containing lables of training data
 #' @export
-#' @examples
-#' get_DeepCC_label(deepcc_model, newdata_fs)
-get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = F, prob_raw = F)
+get_DeepCC_label <- function(DeepCCModel, newData, cutoff = 0.5, prob_mode = FALSE, prob_raw = FALSE)
 {
-  res <- predict(DeepCCModel$classifier, newData)
+  newData <- alignNewData(DeepCCModel, newData)
+  res <- stats::predict(DeepCCModel$classifier, as.matrix(newData))
   predicted <- apply(res, 1, function(z){
     if (max(z) >= cutoff){
       which.max(z)
     }
     else {
-      NA
+      NA_integer_
     }
   })
-  pred <- factor(predicted, levels = seq(length(DeepCCModel$levels)),
+  pred <- factor(predicted, levels = seq_along(DeepCCModel$levels),
                  labels = DeepCCModel$levels)
   if (prob_mode) {
     pred <- data.frame(DeepCC = as.character(pred),
-                       Probability = round(apply(res, 1, max), digits =3))
+                       Probability = round(apply(res, 1, max), digits = 3))
   }
-
-  if (prob_mode & prob_raw) {
+  if (prob_mode && prob_raw) {
     pred <- res
   }
-
   pred
 }
 
-#' Get DeepCC prob mat
+#' Get DeepCC Prob Matrix
 #'
+#' @param DeepCCModel a trained DeepCC model
+#' @param newData a data.frame containing functional spectra of new data
+#' @return a matrix containing class probabilities for each sample
 #' @export
-#' @examples
-#' getDeepCCLabels(deepcc_model, newdata_fs)
 get_DeepCC_prob <- function(DeepCCModel, newData){
-
-  res <- predict(DeepCCModel$classifier, newData)
+  newData <- alignNewData(DeepCCModel, newData)
+  res <- stats::predict(DeepCCModel$classifier, as.matrix(newData))
   colnames(res) <- DeepCCModel$levels
-
   res
 }
 
 #' Get DeepCC Features
 #'
-#' This function obtains DeepCC Features form functional spectra
+#' This function obtains DeepCC Features from functional spectra using the
+#' second-to-last layer of the classifier in inference mode.
 #'
-#' @param DeepCCModel a training DeepCC model
+#' @param DeepCCModel a trained DeepCC model
 #' @param fs a data.frame containing functional spectra (each row presents one sample)
-#' @return a data.frame containing DeepCC Features extracted from the last hidden layer
+#' @return a data.frame containing DeepCC Features extracted from the second-to-last layer
 #' @export
-#' @examples
-#' getDeepCCFeatures(deepcc_model, fs)
 get_DeepCC_features <- function(DeepCCModel, fs) {
-
+  fs <- alignNewData(DeepCCModel, fs)
   model <- DeepCCModel$classifier
-  intermediate_layer_model <- keras::keras_model(model$input,
-                                                 model$layers[[length(model$layers)-1]]$output)
-  df <- predict(intermediate_layer_model, fs)
+  intermediate_layer_model <- keras3::keras_model(inputs = model$input,
+                                                  outputs = model$layers[[length(model$layers) - 1]]$output)
+  df <- stats::predict(intermediate_layer_model, as.matrix(fs))
   rownames(df) <- rownames(fs)
   df
+}
+
+#' Align new data columns to model feature order
+#' @noRd
+alignNewData <- function(DeepCCModel, newData) {
+  if (is.null(DeepCCModel$feature_names)) return(newData)
+  if (!is.data.frame(newData) && !is.matrix(newData)) stop("newData must be a data.frame or matrix.")
+  if (is.null(colnames(newData))) {
+    warning("newData has no column names; using positional order for compatibility.")
+    return(newData)
+  }
+  missing <- setdiff(DeepCCModel$feature_names, colnames(newData))
+  if (length(missing)) {
+    stop(paste("Missing required features:", paste(utils::head(missing, 10), collapse = ", "),
+               if (length(missing) > 10) paste0(" (and ", length(missing) - 10, " more)") else ""))
+  }
+  newData <- newData[, DeepCCModel$feature_names, drop = FALSE]
+  if (is.data.frame(newData)) as.data.frame(newData) else newData
 }

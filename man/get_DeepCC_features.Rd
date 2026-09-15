@@ -7,16 +7,14 @@
 get_DeepCC_features(DeepCCModel, fs)
 }
 \arguments{
-\item{DeepCCModel}{a training DeepCC model}
+\item{DeepCCModel}{a trained DeepCC model}
 
 \item{fs}{a data.frame containing functional spectra (each row presents one sample)}
 }
 \value{
-a data.frame containing DeepCC Features extracted from the last hidden layer
+a data.frame containing DeepCC Features extracted from the second-to-last layer
 }
 \description{
-This function obtains DeepCC Features form functional spectra
-}
-\examples{
-getDeepCCFeatures(deepcc_model, fs)
+This function obtains DeepCC Features from functional spectra using the
+second-to-last layer of the classifier in inference mode.
 }

@@ -16,5 +16,8 @@ a named vecter containing the value of gene expression
 This function preprocess gene list for futhur process
 }
 \examples{
+\dontrun{
+geneList <- setNames(rnorm(10), paste0("G", seq_len(10)))
 preprocessGeneList(geneList)
+}
 }

@@ -16,5 +16,7 @@ a list containing gene sets by EntrezID
 This function extract a list of gene sets from gmt file.
 }
 \examples{
+\dontrun{
 msigdbv51 <- get_gene_sets("msigdb.v5.1.entrez.gmt")
+}
 }

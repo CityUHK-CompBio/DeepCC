@@ -23,9 +23,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calcEnrichmentScoreBatchCPP
+Rcpp::NumericMatrix calcEnrichmentScoreBatchCPP(Rcpp::NumericMatrix expr, Rcpp::IntegerVector setStarts, Rcpp::IntegerVector setMembers, int nthreads, double exponent);
+RcppExport SEXP _DeepCC_calcEnrichmentScoreBatchCPP(SEXP exprSEXP, SEXP setStartsSEXP, SEXP setMembersSEXP, SEXP nthreadsSEXP, SEXP exponentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type expr(exprSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type setStarts(setStartsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type setMembers(setMembersSEXP);
+    Rcpp::traits::input_parameter< int >::type nthreads(nthreadsSEXP);
+    Rcpp::traits::input_parameter< double >::type exponent(exponentSEXP);
+    rcpp_result_gen = Rcpp::wrap(calcEnrichmentScoreBatchCPP(expr, setStarts, setMembers, nthreads, exponent));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DeepCC_calcEnrichmentScoreCPP", (DL_FUNC) &_DeepCC_calcEnrichmentScoreCPP, 3},
+    {"_DeepCC_calcEnrichmentScoreBatchCPP", (DL_FUNC) &_DeepCC_calcEnrichmentScoreBatchCPP, 5},
     {NULL, NULL, 0}
 };
 

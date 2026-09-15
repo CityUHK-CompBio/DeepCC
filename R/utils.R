@@ -8,7 +8,9 @@
 #' @return a numeric indicating error rate in a single run
 #' @export
 #' @examples
-#' cross_validation(tcga_fs, tcga_labels)
+#' \dontrun{
+#' cross_validation(fs, labels)
+#' }
 cross_validation <- function(fs, labels, fold = 5) {
   fs <- fs[!is.na(labels), ]
   labels <- na.omit(labels)
@@ -37,7 +39,9 @@ cross_validation <- function(fs, labels, fold = 5) {
 #' @return a list containing gene sets by EntrezID
 #' @export
 #' @examples
+#' \dontrun{
 #' msigdbv51 <- get_gene_sets("msigdb.v5.1.entrez.gmt")
+#' }
 
 get_gene_sets <- function(file) {
   msig <- GSEABase::getGmt(file, geneIdType=EntrezIdentifier())
@@ -57,7 +61,13 @@ get_gene_sets <- function(file) {
 #' @import ggplot2 cowplot
 #' @export
 #' @examples
+#' \dontrun{
+#' set.seed(42)
+#' df <- as.data.frame(matrix(rnorm(30*10), nrow=30, ncol=10))
+#' labels <- sample(c("A", "B", "C"), 30, replace=TRUE)
+#' color <- c(A="red", B="blue", C="green")
 #' sample_plot <- vis_samples(df, labels, color)
+#' }
 vis_samples <- function(data, labels, color, guide_fill="legend") {
   normalise <- function(x, na.rm = TRUE) {
     ranx <- range(x, na.rm = na.rm)
@@ -68,13 +78,13 @@ vis_samples <- function(data, labels, color, guide_fill="legend") {
     data <- data[!is.na(labels), ]
     labels <- na.omit(labels)
     labels <- as.numeric(as.factor(labels))
-    summary(cluster:::silhouette.default.R(labels, dist(data)))$avg.width
+    summary(cluster::silhouette(labels, stats::dist(data)))$avg.width
   }
 
   asw <- calcAvgSilhouetteWidth(data, labels)
   asw_df <- data.frame(x=0.8, y=-0.1, label=paste("ASW =", round(asw, 3)))
 
-  pc <- prcomp(data)
+  pc <- stats::prcomp(data)
   r2 <- data.frame(PC1=normalise(pc$x[,1]), PC2=normalise(pc$x[,2]), Class=factor(labels))
   r2 <- r2[!is.na(r2$Class), ]
 

@@ -8,8 +8,8 @@ get_DeepCC_label(
   DeepCCModel,
   newData,
   cutoff = 0.5,
-  prob_mode = F,
-  prob_raw = F
+  prob_mode = FALSE,
+  prob_raw = FALSE
 )
 }
 \arguments{
@@ -18,13 +18,14 @@ get_DeepCC_label(
 \item{newData}{a data.frame containing functional spectra of new data (each presnets one sample)}
 
 \item{cutoff}{a numeric indicating cutoff of poster probability}
+
+\item{prob_mode}{a logical flag; if TRUE, return a data.frame with labels and probabilities}
+
+\item{prob_raw}{a logical flag; if TRUE and prob_mode is TRUE, return the raw probability matrix}
 }
 \value{
 a character vector containing lables of training data
 }
 \description{
 This function classifys new data set using trained DeepCC model.
-}
-\examples{
-get_DeepCC_label(deepcc_model, newdata_fs)
 }

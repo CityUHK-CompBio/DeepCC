@@ -2,13 +2,18 @@
 % Please edit documentation in R/DeepLearning.R
 \name{get_DeepCC_prob}
 \alias{get_DeepCC_prob}
-\title{Get DeepCC prob mat}
+\title{Get DeepCC Prob Matrix}
 \usage{
 get_DeepCC_prob(DeepCCModel, newData)
 }
-\description{
-Get DeepCC prob mat
+\arguments{
+\item{DeepCCModel}{a trained DeepCC model}
+
+\item{newData}{a data.frame containing functional spectra of new data}
 }
-\examples{
-getDeepCCLabels(deepcc_model, newdata_fs)
+\value{
+a matrix containing class probabilities for each sample
+}
+\description{
+Get DeepCC Prob Matrix
 }

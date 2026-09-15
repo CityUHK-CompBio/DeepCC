@@ -4,7 +4,7 @@
 \alias{get_msigdbr}
 \title{get MSigDBr from R package `msigdbr`}
 \usage{
-get_msigdbr(cores)
+get_msigdbr(cores = NULL)
 }
 \arguments{
 \item{cores}{a integer indicating cpu cores used in parallel computing (default = all cores -2 )}
@@ -16,5 +16,7 @@ a list containing 25, 724 gene sets, each sets contains multiple entrez_gene
 This function defines MSigDBr from a R package, with 25, 724 gene sets
 }
 \examples{
+\dontrun{
 MSigDBr <- get_msigdbr()
+}
 }

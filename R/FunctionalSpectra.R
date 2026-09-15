@@ -5,7 +5,10 @@
 #' @param geneList a named vector containing the value of gene expression
 #' @return a named vecter containing the value of gene expression
 #' @examples
+#' \dontrun{
+#' geneList <- setNames(rnorm(10), paste0("G", seq_len(10)))
 #' preprocessGeneList(geneList)
+#' }
 preprocessGeneList <- function(geneList) {
   geneList <- geneList[which((!is.na(geneList)) & (names(geneList)!="") & (!is.na(names(geneList))))]
   geneList <- tapply(t(geneList), names(geneList), max)
@@ -23,46 +26,132 @@ preprocessGeneList <- function(geneList) {
 #' @import Rcpp
 #' @export
 #' @examples
+#' geneList <- setNames(rnorm(10), paste0("G", seq_len(10)))
+#' geneSet <- c("G1", "G5")
 #' calcEnrichmentScore(geneList, geneSet)
 calcEnrichmentScore <- function(geneList, geneSet)
 {
   calcEnrichmentScoreCPP((names(geneList) %in% geneSet), geneList, 1)
 }
 
+#' Resolve gene sets from legacy string or list
+#' @noRd
+resolveGeneSets <- function(geneSets) {
+  if (is.character(geneSets) && length(geneSets) == 1) {
+    nm <- geneSets
+    if (nm == 'MSigDBv5') {
+      utils::data(MSigDBv5, envir = environment())
+      return(get("MSigDBv5", envir = environment()))
+    } else if (nm == 'MSigDBv6') {
+      utils::data(MSigDBv6, envir = environment())
+      return(get("MSigDBv6", envir = environment()))
+    } else if (nm == 'MSigDBv7') {
+      utils::data(MSigDBv7, envir = environment())
+      return(get("MSigDBv7", envir = environment()))
+    } else {
+      stop(paste("Unsupported geneSets string:", nm, ". Use 'MSigDBv5', 'MSigDBv6', 'MSigDBv7' or a named list."))
+    }
+  }
+  if (!is.list(geneSets)) stop("geneSets must be a character string or a named list.")
+  geneSets
+}
+
+#' Map gene sets to flat integer indices for batch C++ kernel
+#' @noRd
+buildFlatGeneSetIndex <- function(geneSets, geneNames) {
+  P <- length(geneSets)
+  starts <- integer(P + 1)
+  members_list <- lapply(seq_len(P), function(i) {
+    genes <- geneSets[[i]]
+    if (is.null(genes) || length(genes) == 0) return(integer(0))
+    idx <- match(unique(as.character(genes)), geneNames) - 1L
+    idx[!is.na(idx)]
+  })
+  starts[-1] <- cumsum(vapply(members_list, length, integer(1)))
+  members <- unlist(members_list, use.names = FALSE)
+  list(starts = starts, members = members)
+}
+
 #' Generate Functional Spectra
 #'
-#' This function generates functional spectra for given gene expressin profiles.
+#' This function generates functional spectra for given gene expression profiles.
+#' Uses a fast batch native kernel by default, with automatic fallback to the
+#' legacy per-row parallel path when the input structure prevents batch indexing.
 #'
 #' @param eps a data.frame containing gene expression profiles (each row presents one sample)
-#' @param geneSet a List containing gene sets (default: MSigDB v6)
-#' @param cores a integer indicating cpu cores used in parallel computing (default = all cores -2 )
+#' @param geneSets a List containing gene sets (default: MSigDB v7)
+#' @param scale logical indicating whether to center each gene column (default: TRUE)
+#' @param cores integer or NULL; number of CPU cores. NULL uses the native kernel's
+#'   thread pool. Set to a specific integer for legacy parallel fallback.
 #' @return a data.frame containing functional spectra
 #' @seealso  \code{\link{getFunctionalSpectrum}} for a single expression profile.
 #' @importFrom foreach foreach %dopar%
+#' @importFrom doParallel registerDoParallel
 #' @export
 #' @examples
-#' getFunctionalSpectra(eps)
-getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = T, cores = parallel::detectCores() - 2) {
-  if (geneSets == 'MSigDBv5') {
-    data(MSigDBv5)
-    geneSets = MSigDBv5
-  } else if (geneSets == 'MSigDBv6') {
-    data(MSigDBv6)
-    geneSets = MSigDBv6
-  } else if(geneSets == 'MSigDBv7') {
-    data(MSigDBv7)
-    geneSets = MSigDBv7
+#' \dontrun{
+#' set.seed(42)
+#' eps <- as.data.frame(matrix(rnorm(10*100), nrow=10, ncol=100))
+#' colnames(eps) <- paste0("G", seq_len(100))
+#' fs <- getFunctionalSpectra(eps, geneSets=list(setA=c("G1","G5","G20")))
+#' }
+getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = TRUE, cores = NULL) {
+  geneSets <- resolveGeneSets(geneSets)
+  P <- length(geneSets)
+
+  if (scale) eps <- scale(eps, scale = FALSE)
+  eps <- as.matrix(eps)
+  if (nrow(eps) == 0 || ncol(eps) == 0) stop("eps has zero rows or columns.")
+
+  geneNames <- colnames(eps)
+  if (is.null(geneNames)) geneNames <- as.character(seq_len(ncol(eps)))
+
+  # Handle duplicate gene names by keeping max value per name
+  dupNames <- duplicated(geneNames) | duplicated(geneNames, fromLast = TRUE)
+  if (any(dupNames)) {
+    # Reduce to unique names with max value per name (per sample)
+    uniqNames <- unique(geneNames)
+    epsRed <- matrix(NA_real_, nrow = nrow(eps), ncol = length(uniqNames),
+                     dimnames = list(rownames(eps), uniqNames))
+    for (gn in uniqNames) {
+      cols <- which(geneNames == gn)
+      epsRed[, gn] <- apply(eps[, cols, drop = FALSE], 1, max, na.rm = TRUE)
+    }
+    eps <- epsRed
+    geneNames <- uniqNames
   }
 
-  if(scale) eps <- scale(eps, scale = FALSE)
+  # Try the batch sparse kernel
+  useBatch <- TRUE
+  flat <- tryCatch({
+    buildFlatGeneSetIndex(geneSets, geneNames)
+  }, error = function(e) {
+    useBatch <<- FALSE
+    list(starts = integer(0), members = integer(0))
+  })
 
+  if (useBatch && length(flat$starts) == P + 1) {
+    # Use the optimized batch kernel
+    if (is.null(cores)) {
+      res <- calcEnrichmentScoreBatchCPP(eps, flat$starts, flat$members)
+    } else {
+      res <- calcEnrichmentScoreBatchCPP(eps, flat$starts, flat$members, nthreads = as.integer(cores))
+    }
+    dimnames(res) <- list(rownames(eps), names(geneSets))
+    return(as.data.frame(res))
+  }
+
+  # Legacy per-row parallel fallback
+  if (is.null(cores)) cores <- max(1L, parallel::detectCores() - 2L)
   doParallel::registerDoParallel(cores)
-  res <- foreach(idx = 1:nrow(eps), .combine = rbind) %dopar% {
+  on.exit(doParallel::stopImplicitCluster(), add = TRUE)
+  res <- foreach(idx = seq_len(nrow(eps)), .combine = rbind) %dopar% {
     geneList <- preprocessGeneList(eps[idx, ])
     sapply(geneSets, function(x) calcEnrichmentScore(geneList, x))
   }
   rownames(res) <- rownames(eps)
-  res
+  colnames(res) <- names(geneSets)
+  as.data.frame(res)
 }
 
 #' Generate Functional Spectrum
@@ -70,7 +159,7 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = T, cores = 
 #' This function generates functional spectrum for a single gene expression profile.
 #'
 #' @param expressionProfile a named numeric vector containing gene expression profile
-#' @param geneSets a List containing gene sets (default: MSiDB v6)
+#' @param geneSets a List containing gene sets (default: MSigDB v7)
 #' @param refExp a character indicating cancer typer according to TCGA's indentifier, or a named vector reference expression
 #' @param logChange a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)
 #' @param inverseRescale a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)
@@ -82,8 +171,12 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = T, cores = 
 #' @seealso \code{\link{getFunctionalSpectra}} for a batch of gene expression profiles.
 #' @export
 #' @examples
-#' getFunctionalSpectrum(ep, refExp = "COADREAD")
-getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv7', refExp = NULL, logChange = F, inverseRescale = F, filter = -3) {
+#' \dontrun{
+#' ep <- setNames(rnorm(100), paste0("G", seq_len(100)))
+#' ref <- setNames(rnorm(100), paste0("G", seq_len(100)))
+#' fs <- getFunctionalSpectrum(ep, geneSets=list(setA=c("G1","G5","G20")), refExp=ref)
+#' }
+getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv7', refExp = NULL, logChange = FALSE, inverseRescale = FALSE, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")
@@ -96,25 +189,16 @@ getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv7', refE
 
     common <- intersect(names(expressionProfile), names(refExp))
     if(!inverseRescale) {
-      expressionProfile <- predict(lm(refExp[common] ~ expressionProfile[common])) -expressionProfile[common]
+      expressionProfile <- stats::predict(stats::lm(refExp[common] ~ expressionProfile[common])) - expressionProfile[common]
     } else {
-      expressionProfile <- expressionProfile[common] - predict(lm(expressionProfile[common] ~ refExp[common]))
+      expressionProfile <- expressionProfile[common] - stats::predict(stats::lm(expressionProfile[common] ~ refExp[common]))
     }
   }
   geneList <- preprocessGeneList(expressionProfile)
 
-  if (geneSets == 'MSigDBv5') {
-    data(MSigDBv5)
-    geneSets = MSiDBv5
-  } else if (geneSets == 'MSigDBv6') {
-    data(MSigDBv6)
-    geneSets = MSigDBv6
-  } else if (geneSets == 'MSigDBv7') {
-    data(MSigDBv7)
-    geneSets = MSigDBv7
-  }
+  geneSets <- resolveGeneSets(geneSets)
 
-  res <- sapply(1:length(geneSets), function(idx) calcEnrichmentScore(geneList, geneSets[[idx]]))
+  res <- vapply(seq_len(length(geneSets)), function(i) calcEnrichmentScore(geneList, geneSets[[i]]), numeric(1))
   names(res) <- names(geneSets)
   res
 }

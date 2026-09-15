@@ -6,16 +6,26 @@ Author: Feng Gao, Chenghang Li, Xin Wang
 Maintainer: Feng Gao <gaofeng21cn@gmail.com>
 Description: DeepCC is versatile and robust cancer subtyping framework, based on
     deep learning and incorporate functional gene sets as prior knowledge.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: 
-    R (>= 3.2)
-RoxygenNote: 7.1.1
-URL: http://github.com/CityUHK-CompBio/DeepCC
-LinkingTo: 
+LazyDataCompression: xz
+Depends:
+    R (>= 4.0)
+URL: https://github.com/CityUHK-CompBio/DeepCC
+LinkingTo:
     Rcpp
-Imports: 
-    Rcpp, keras, doParallel, foreach, ggplot2, cowplot
-Suggest:
-    msigdbr
+Imports:
+    Rcpp,
+    keras3,
+    foreach,
+    doParallel,
+    ggplot2,
+    cowplot,
+    GSEABase,
+    msigdbr,
+    cluster
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

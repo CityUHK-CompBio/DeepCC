@@ -15,6 +15,10 @@ export(vis_samples)
 import(Rcpp)
 import(cowplot)
 import(ggplot2)
-importFrom(foreach,"%dopar%")
-importFrom(foreach,foreach)
+importFrom(doParallel,registerDoParallel)
+importFrom(stats,na.omit)
+importFrom(foreach,
+  "%dopar%",
+  foreach
+)
 useDynLib(DeepCC)

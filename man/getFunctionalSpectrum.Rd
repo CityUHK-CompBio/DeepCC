@@ -8,15 +8,15 @@ getFunctionalSpectrum(
   expressionProfile,
   geneSets = "MSigDBv7",
   refExp = NULL,
-  logChange = F,
-  inverseRescale = F,
+  logChange = FALSE,
+  inverseRescale = FALSE,
   filter = -3
 )
 }
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
 
-\item{geneSets}{a List containing gene sets (default: MSiDB v6)}
+\item{geneSets}{a List containing gene sets (default: MSigDB v7)}
 
 \item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector reference expression}
 
@@ -38,7 +38,11 @@ In DeepCC we also prepared average expression profiles of each cancer types in T
 If your single sample is microarray data, we strongly sugguest turn the parameter \code{inverseRescale} on, since TCGA is RNA-Seq, which has very small expression value for low expressed genes, compared with microarray.
 }
 \examples{
-getFunctionalSpectrum(ep, refExp = "COADREAD")
+\dontrun{
+ep <- setNames(rnorm(100), paste0("G", seq_len(100)))
+ref <- setNames(rnorm(100), paste0("G", seq_len(100)))
+fs <- getFunctionalSpectrum(ep, geneSets=list(setA=c("G1","G5","G20")), refExp=ref)
+}
 }
 \seealso{
 \code{\link{getFunctionalSpectra}} for a batch of gene expression profiles.

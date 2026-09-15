@@ -5,3 +5,7 @@ calcEnrichmentScoreCPP <- function(Set, Eso, exponent) {
     .Call('_DeepCC_calcEnrichmentScoreCPP', PACKAGE = 'DeepCC', Set, Eso, exponent)
 }
 
+calcEnrichmentScoreBatchCPP <- function(expr, setStarts, setMembers, nthreads = 1L, exponent = 1.0) {
+    .Call('_DeepCC_calcEnrichmentScoreBatchCPP', PACKAGE = 'DeepCC', expr, setStarts, setMembers, nthreads, exponent)
+}
+

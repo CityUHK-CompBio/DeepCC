@@ -18,5 +18,7 @@ a numeric indicating enrichment score
 This function calculates enrichment score of a gene list on a specific gene set.
 }
 \examples{
+geneList <- setNames(rnorm(10), paste0("G", seq_len(10)))
+geneSet <- c("G1", "G5")
 calcEnrichmentScore(geneList, geneSet)
 }
