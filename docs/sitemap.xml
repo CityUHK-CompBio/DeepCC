@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/404.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/LICENSE-text.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/authors.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/index.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/MSigDB-data.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/calcEnrichmentScore.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/cross_validation.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/getFunctionalSpectra.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/getFunctionalSpectrum.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/get_DeepCC_features.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/get_DeepCC_label.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/get_DeepCC_prob.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/get_gene_sets.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/get_msigdbr.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/index.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/load_DeepCC_model.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/preprocessGeneList.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/save_DeepCC_model.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/train_DeepCC_model.html</loc></url>
+<url><loc>https://cityuhk-compbio.github.io/DeepCC/reference/vis_samples.html</loc></url>
+</urlset>
+

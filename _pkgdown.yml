@@ -1,0 +1,39 @@
+url: https://cityuhk-compbio.github.io/DeepCC/
+
+template:
+  bootstrap: 5
+  params:
+    bootswatch: cosmo
+
+development:
+  mode: auto
+
+reference:
+- title: Functional spectra
+  contents:
+  - preprocessGeneList
+  - calcEnrichmentScore
+  - getFunctionalSpectra
+  - getFunctionalSpectrum
+  - get_msigdbr
+  - get_gene_sets
+
+- title: Deep learning
+  contents:
+  - train_DeepCC_model
+  - save_DeepCC_model
+  - load_DeepCC_model
+  - get_DeepCC_label
+  - get_DeepCC_prob
+  - get_DeepCC_features
+
+- title: Utilities
+  contents:
+  - cross_validation
+  - vis_samples
+
+- title: Data
+  contents:
+  - MSigDBv5
+  - MSigDBv6
+  - MSigDBv7
