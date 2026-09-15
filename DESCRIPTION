@@ -6,7 +6,7 @@ Author: Feng Gao, Chenghang Li, Xin Wang
 Maintainer: Feng Gao <gaofeng21cn@gmail.com>
 Description: DeepCC is versatile and robust cancer subtyping framework, based on
     deep learning and incorporate functional gene sets as prior knowledge.
-License: MIT + file LICENSE
+License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
