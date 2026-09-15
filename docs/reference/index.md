@@ -11,7 +11,7 @@
 - [`getFunctionalSpectrum()`](https://cityuhk-compbio.github.io/DeepCC/reference/getFunctionalSpectrum.md)
   : Generate Functional Spectrum
 - [`get_msigdbr()`](https://cityuhk-compbio.github.io/DeepCC/reference/get_msigdbr.md)
-  : get MSigDBr from R package \`msigdbr\`
+  : Get current MSigDB gene sets
 - [`get_gene_sets()`](https://cityuhk-compbio.github.io/DeepCC/reference/get_gene_sets.md)
   : Get Gene Sets
 

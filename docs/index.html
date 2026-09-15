@@ -76,10 +76,14 @@
 <span></span>
 <span><span class="co"># eps: data.frame or matrix (samples × genes), colnames are Entrez IDs</span></span>
 <span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getFunctionalSpectra.html">getFunctionalSpectra</a></span><span class="op">(</span><span class="va">eps</span><span class="op">)</span></span></code></pre></div>
-<p>By default, DeepCC uses the built-in MSigDB v7 collection (22,596 gene sets). You can also use other built-in versions or supply a custom named list of gene sets:</p>
+<p>By default, DeepCC uses the current MSigDB collection from the <a href="https://cran.r-project.org/package=msigdbr" class="external-link">msigdbr</a> package (35,361 gene sets). You can also filter to a specific collection or supply a custom named list:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getFunctionalSpectra.html">getFunctionalSpectra</a></span><span class="op">(</span><span class="va">eps</span>, geneSets <span class="op">=</span> <span class="st">"MSigDBv5"</span><span class="op">)</span></span>
-<span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getFunctionalSpectra.html">getFunctionalSpectra</a></span><span class="op">(</span><span class="va">eps</span>, geneSets <span class="op">=</span> <span class="va">MSigDBr</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">MSigDBr</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_msigdbr.html">get_msigdbr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getFunctionalSpectra.html">getFunctionalSpectra</a></span><span class="op">(</span><span class="va">eps</span>, geneSets <span class="op">=</span> <span class="va">MSigDBr</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or filter to one collection</span></span>
+<span><span class="va">hallmark</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_msigdbr.html">get_msigdbr</a></span><span class="op">(</span>collection <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span></span>
+<span><span class="va">fs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getFunctionalSpectra.html">getFunctionalSpectra</a></span><span class="op">(</span><span class="va">eps</span>, geneSets <span class="op">=</span> <span class="va">hallmark</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="train-a-model">Train a model<a class="anchor" aria-label="anchor" href="#train-a-model"></a>
@@ -110,45 +114,34 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="available-gene-sets">Available gene sets<a class="anchor" aria-label="anchor" href="#available-gene-sets"></a>
+<h2 id="gene-sets">Gene sets<a class="anchor" aria-label="anchor" href="#gene-sets"></a>
 </h2>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr>
 <th>Source</th>
-<th>Gene sets</th>
 <th>Usage</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Built-in MSigDB v5</td>
-<td>10,348</td>
-<td><code>geneSets = "MSigDBv5"</code></td>
+<td>Current MSigDB (all collections, 35,361 sets)</td>
+<td><code><a href="reference/get_msigdbr.html">get_msigdbr()</a></code></td>
 </tr>
 <tr>
-<td>Built-in MSigDB v6</td>
-<td>17,779</td>
-<td><code>geneSets = "MSigDBv6"</code></td>
-</tr>
-<tr>
-<td>Built-in MSigDB v7</td>
-<td>22,596</td>
-<td>
-<code>geneSets = "MSigDBv7"</code> (default)</td>
-</tr>
-<tr>
-<td>Latest MSigDB via msigdbr</td>
-<td>varies</td>
-<td><code>geneSets = get_msigdbr()</code></td>
+<td>MSigDB collection subset (e.g. Hallmark, 50 sets)</td>
+<td><code>get_msigdbr(collection = "H")</code></td>
 </tr>
 <tr>
 <td>Custom GMT file</td>
-<td>varies</td>
-<td><code>geneSets = get_gene_sets("path.gmt")</code></td>
+<td><code>get_gene_sets("path.gmt")</code></td>
 </tr>
 <tr>
 <td>Custom named list</td>
-<td>varies</td>
-<td>pass directly</td>
+<td>pass directly to <code>geneSets</code>
+</td>
 </tr>
 </tbody>
 </table>

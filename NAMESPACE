@@ -8,6 +8,7 @@ export(get_DeepCC_features)
 export(get_DeepCC_label)
 export(get_DeepCC_prob)
 export(get_gene_sets)
+export(get_msigdbr)
 export(load_DeepCC_model)
 export(save_DeepCC_model)
 export(train_DeepCC_model)
@@ -16,7 +17,6 @@ import(Rcpp)
 import(cowplot)
 import(ggplot2)
 importFrom(doParallel,registerDoParallel)
-importFrom(stats,na.omit)
 importFrom(foreach,
   "%dopar%",
   foreach

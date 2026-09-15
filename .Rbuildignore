@@ -7,4 +7,5 @@
 ^\.Rproj\.user$
 ^DeepCC\.Rproj$
 _config\.yml$
+data/MSigDBv\d\.rda$
 README\.html$

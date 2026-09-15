@@ -42,13 +42,18 @@ library(DeepCC)
 fs <- getFunctionalSpectra(eps)
 ```
 
-By default, DeepCC uses the built-in MSigDB v7 collection (22,596 gene
-sets). You can also use other built-in versions or supply a custom named
-list of gene sets:
+By default, DeepCC uses the current MSigDB collection from the
+[msigdbr](https://cran.r-project.org/package=msigdbr) package (35,361
+gene sets). You can also filter to a specific collection or supply a
+custom named list:
 
 ```r
-fs <- getFunctionalSpectra(eps, geneSets = "MSigDBv5")
+MSigDBr <- get_msigdbr()
 fs <- getFunctionalSpectra(eps, geneSets = MSigDBr)
+
+# Or filter to one collection
+hallmark <- get_msigdbr(collection = "H")
+fs <- getFunctionalSpectra(eps, geneSets = hallmark)
 ```
 
 ### Train a model
@@ -86,16 +91,14 @@ features <- get_DeepCC_features(deepcc_model, fs)
 Returns the 10-dimensional penultimate layer output, useful for
 downstream visualization or clustering.
 
-## Available gene sets
+## Gene sets
 
-| Source | Gene sets | Usage |
-| --- | --- | --- |
-| Built-in MSigDB v5 | 10,348 | `geneSets = "MSigDBv5"` |
-| Built-in MSigDB v6 | 17,779 | `geneSets = "MSigDBv6"` |
-| Built-in MSigDB v7 | 22,596 | `geneSets = "MSigDBv7"` (default) |
-| Latest MSigDB via msigdbr | varies | `geneSets = get_msigdbr()` |
-| Custom GMT file | varies | `geneSets = get_gene_sets("path.gmt")` |
-| Custom named list | varies | pass directly |
+| Source | Usage |
+| --- | --- |
+| Current MSigDB (all collections, 35,361 sets) | `get_msigdbr()` |
+| MSigDB collection subset (e.g. Hallmark, 50 sets) | `get_msigdbr(collection = "H")` |
+| Custom GMT file | `get_gene_sets("path.gmt")` |
+| Custom named list | pass directly to `geneSets` |
 
 ## Pre-trained models
 

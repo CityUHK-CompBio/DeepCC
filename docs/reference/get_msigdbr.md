@@ -1,29 +1,33 @@
-# get MSigDBr from R package \`msigdbr\`
+# Get current MSigDB gene sets
 
-This function defines MSigDBr from a R package, with 25, 724 gene sets
+Retrieves the current MSigDB gene set collection from the \`msigdbr\`
+package. Returns a named list suitable for direct use in
+\`getFunctionalSpectra()\`.
 
 ## Usage
 
 ``` r
-get_msigdbr(cores = NULL)
+get_msigdbr(collection = NULL)
 ```
 
 ## Arguments
 
-- cores:
+- collection:
 
-  a integer indicating cpu cores used in parallel computing (default =
-  all cores -2 )
+  character; MSigDB collection to retrieve. Use \`NULL\` (default) for
+  all collections, or a specific one such as \`"C2"\`, \`"C5"\`, or
+  \`"H"\`.
 
 ## Value
 
-a list containing 25, 724 gene sets, each sets contains multiple
-entrez_gene
+a named list of gene sets, each element a character vector of Entrez
+gene IDs
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 MSigDBr <- get_msigdbr()
+fs <- getFunctionalSpectra(eps, geneSets = MSigDBr)
 } # }
 ```

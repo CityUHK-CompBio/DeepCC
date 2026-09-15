@@ -38,19 +38,9 @@ calcEnrichmentScore <- function(geneList, geneSet)
 #' @noRd
 resolveGeneSets <- function(geneSets) {
   if (is.character(geneSets) && length(geneSets) == 1) {
-    nm <- geneSets
-    if (nm == 'MSigDBv5') {
-      utils::data(MSigDBv5, envir = environment())
-      return(get("MSigDBv5", envir = environment()))
-    } else if (nm == 'MSigDBv6') {
-      utils::data(MSigDBv6, envir = environment())
-      return(get("MSigDBv6", envir = environment()))
-    } else if (nm == 'MSigDBv7') {
-      utils::data(MSigDBv7, envir = environment())
-      return(get("MSigDBv7", envir = environment()))
-    } else {
-      stop(paste("Unsupported geneSets string:", nm, ". Use 'MSigDBv5', 'MSigDBv6', 'MSigDBv7' or a named list."))
-    }
+    stop(paste("String geneSets shortcuts (MSigDBv5/v6/v7) have been removed.",
+               "Use get_msigdbr() for current MSigDB data, get_gene_sets() for GMT files,",
+               "or pass a named list directly."))
   }
   if (!is.list(geneSets)) stop("geneSets must be a character string or a named list.")
   geneSets

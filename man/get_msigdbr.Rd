@@ -2,21 +2,27 @@
 % Please edit documentation in R/get_msigdbr.R
 \name{get_msigdbr}
 \alias{get_msigdbr}
-\title{get MSigDBr from R package `msigdbr`}
+\title{Get current MSigDB gene sets}
 \usage{
-get_msigdbr(cores = NULL)
+get_msigdbr(collection = NULL)
 }
 \arguments{
-\item{cores}{a integer indicating cpu cores used in parallel computing (default = all cores -2 )}
+\item{collection}{character; MSigDB collection to retrieve. Use `NULL`
+(default) for all collections, or a specific one such as `"C2"`, `"C5"`,
+or `"H"`.}
 }
 \value{
-a list containing 25, 724 gene sets, each sets contains multiple entrez_gene
+a named list of gene sets, each element a character vector of
+  Entrez gene IDs
 }
 \description{
-This function defines MSigDBr from a R package, with 25, 724 gene sets
+Retrieves the current MSigDB gene set collection from the `msigdbr`
+package. Returns a named list suitable for direct use in
+`getFunctionalSpectra()`.
 }
 \examples{
 \dontrun{
 MSigDBr <- get_msigdbr()
+fs <- getFunctionalSpectra(eps, geneSets = MSigDBr)
 }
 }
