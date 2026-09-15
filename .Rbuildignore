@@ -8,4 +8,8 @@
 ^DeepCC\.Rproj$
 _config\.yml$
 data/MSigDBv\d\.rda$
+^data-raw$
+^_pkgdown\.yml$
+^docs$
+^LICENSE$
 README\.html$

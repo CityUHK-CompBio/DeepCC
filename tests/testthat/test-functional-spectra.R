@@ -46,10 +46,16 @@ test_that("batch kernel matches legacy per-sample calculation with scaling", {
   expect_equal(as.matrix(got), ref, tolerance = 1e-10)
 })
 
-test_that("geneSets string shortcuts are removed with clear error", {
-  expect_error(DeepCC:::resolveGeneSets("MSigDBv7"), "have been removed")
-  expect_error(DeepCC:::resolveGeneSets("MSigDBv5"), "have been removed")
-  expect_error(DeepCC:::resolveGeneSets("MSigDBv6"), "have been removed")
+test_that("legacy version strings fail with a pointer to the current options", {
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv7"), "Unknown geneSets value")
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv5"), "Unknown geneSets value")
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv6"), "Unknown geneSets value")
+})
+
+test_that("bundled cache name resolves without the msigdbr package", {
+  sets <- DeepCC:::resolveGeneSets("MSigDB")
+  expect_type(sets, "list")
+  expect_gt(length(sets), 20000)
 })
 
 test_that("single sample path uses same scoring kernel", {

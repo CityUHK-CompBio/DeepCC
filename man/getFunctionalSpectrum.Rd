@@ -6,7 +6,7 @@
 \usage{
 getFunctionalSpectrum(
   expressionProfile,
-  geneSets = "MSigDBv7",
+  geneSets = "MSigDB",
   refExp = NULL,
   logChange = FALSE,
   inverseRescale = FALSE,
@@ -16,7 +16,9 @@ getFunctionalSpectrum(
 \arguments{
 \item{expressionProfile}{a named numeric vector containing gene expression profile}
 
-\item{geneSets}{a List containing gene sets (default: MSigDB v7)}
+\item{geneSets}{gene sets to score. Either `"MSigDB"` for the bundled
+cache, `"MSigDB_<version>"` for an explicit bundled release, or a named
+list such as the result of [get_msigdbr()]}
 
 \item{refExp}{a character indicating cancer typer according to TCGA's indentifier, or a named vector reference expression}
 

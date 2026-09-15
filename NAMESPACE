@@ -16,9 +16,11 @@ export(vis_samples)
 import(Rcpp)
 import(cowplot)
 import(ggplot2)
+importFrom(GSEABase,EntrezIdentifier)
 importFrom(doParallel,registerDoParallel)
 importFrom(foreach,
   "%dopar%",
   foreach
 )
+importFrom(stats,na.omit)
 useDynLib(DeepCC)

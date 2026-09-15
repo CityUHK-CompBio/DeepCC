@@ -4,12 +4,14 @@
 \alias{getFunctionalSpectra}
 \title{Generate Functional Spectra}
 \usage{
-getFunctionalSpectra(eps, geneSets = "MSigDBv7", scale = TRUE, cores = NULL)
+getFunctionalSpectra(eps, geneSets = "MSigDB", scale = TRUE, cores = NULL)
 }
 \arguments{
 \item{eps}{a data.frame containing gene expression profiles (each row presents one sample)}
 
-\item{geneSets}{a List containing gene sets (default: MSigDB v7)}
+\item{geneSets}{gene sets to score. Either `"MSigDB"` for the bundled
+cache, `"MSigDB_<version>"` for an explicit bundled release, or a named
+list such as the result of [get_msigdbr()]}
 
 \item{scale}{logical indicating whether to center each gene column (default: TRUE)}
 

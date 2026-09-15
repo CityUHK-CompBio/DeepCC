@@ -42,19 +42,26 @@ library(DeepCC)
 fs <- getFunctionalSpectra(eps)
 ```
 
-By default, DeepCC uses the current MSigDB collection from the
-[msigdbr](https://cran.r-project.org/package=msigdbr) package (35,361
-gene sets). You can also filter to a specific collection or supply a
-custom named list:
+DeepCC ships a bundled MSigDB snapshot (release 2026.1.Hs, 35,361 gene
+sets) so functional spectra work offline and without any optional
+dependency. To pull the newest release instead, install
+[msigdbr](https://cran.r-project.org/package=msigdbr):
 
 ```r
+# Bundled snapshot (default, offline)
+fs <- getFunctionalSpectra(eps)
+fs <- getFunctionalSpectra(eps, geneSets = "MSigDB_2026.1.Hs")
+
+# Newest release from msigdbr, optionally filtered to one collection
 MSigDBr <- get_msigdbr()
 fs <- getFunctionalSpectra(eps, geneSets = MSigDBr)
 
-# Or filter to one collection
 hallmark <- get_msigdbr(collection = "H")
 fs <- getFunctionalSpectra(eps, geneSets = hallmark)
 ```
+
+Pinning `geneSets` to an explicit release keeps an analysis reproducible
+even after MSigDB is updated.
 
 ### Train a model
 
@@ -93,12 +100,19 @@ downstream visualization or clustering.
 
 ## Gene sets
 
-| Source | Usage |
-| --- | --- |
-| Current MSigDB (all collections, 35,361 sets) | `get_msigdbr()` |
-| MSigDB collection subset (e.g. Hallmark, 50 sets) | `get_msigdbr(collection = "H")` |
-| Custom GMT file | `get_gene_sets("path.gmt")` |
-| Custom named list | pass directly to `geneSets` |
+DeepCC reads Entrez gene IDs, and every source below returns that
+identifier type.
+
+| Source | Sets | Usage |
+| --- | --- | --- |
+| Bundled MSigDB 2026.1.Hs (offline) | 35,361 | `geneSets = "MSigDB"` (default) |
+| Newest MSigDB release | varies | `get_msigdbr()` |
+| MSigDB collection subset, e.g. Hallmark | 50 | `get_msigdbr(collection = "H")` |
+| GMT file | varies | `get_gene_sets("path.gmt")` |
+| Custom named list | varies | pass directly to `geneSets` |
+
+The bundled snapshot is refreshed only when a new MSigDB milestone release
+is adopted, so a given DeepCC version always resolves to the same gene sets.
 
 ## Pre-trained models
 

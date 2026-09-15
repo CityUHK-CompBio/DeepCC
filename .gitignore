@@ -7,3 +7,5 @@
 *.tar.gz
 *.Rcheck/
 ..Rcheck/
+* 2
+* 2.*

@@ -1,19 +1,24 @@
-#' MSigDB Gene Sets (v5, v6, v7)
+#' Bundled MSigDB gene set cache
 #'
-#' Pre-built named lists of MSigDB gene sets by Entrez ID, used for functional
-#' spectra computation and model training. These are legacy datasets shipped
-#' with the original DeepCC package.
+#' A snapshot of MSigDB gene sets bundled with DeepCC so that functional
+#' spectra can be computed without network access and without the optional
+#' `msigdbr` package. The cache stores Entrez gene IDs, matching the
+#' identifier convention of DeepCC expression input.
 #'
-#' @format A named list where each element is a character vector of Entrez gene
-#'   IDs for one MSigDB gene set.
-#' @name MSigDBv5
-#' @rdname MSigDB-data
-NULL
-
-#' @name MSigDBv6
-#' @rdname MSigDB-data
-NULL
-
-#' @name MSigDBv7
-#' @rdname MSigDB-data
+#' The bundled snapshot is refreshed only when a new MSigDB milestone
+#' release is adopted. Use [get_msigdbr()] to retrieve the current release
+#' from the `msigdbr` package instead.
+#'
+#' @format A named list of gene sets. Each element is a character vector of
+#'   Entrez gene IDs. Attributes record the MSigDB release and provenance:
+#'   \describe{
+#'     \item{db_version}{MSigDB release, e.g. `"2026.1.Hs"`.}
+#'     \item{source}{Provenance of the snapshot, e.g. `"msigdbr"`.}
+#'     \item{collections}{Named character vector mapping each gene set to its
+#'       MSigDB collection.}
+#'   }
+#' @seealso [get_msigdbr()]
+#' @name MSigDB
+#' @docType data
+#' @keywords datasets
 NULL

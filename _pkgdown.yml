@@ -34,6 +34,4 @@ reference:
 
 - title: Data
   contents:
-  - MSigDBv5
-  - MSigDBv6
-  - MSigDBv7
+  - MSigDB

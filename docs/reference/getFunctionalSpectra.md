@@ -8,7 +8,7 @@ prevents batch indexing.
 ## Usage
 
 ``` r
-getFunctionalSpectra(eps, geneSets = "MSigDBv7", scale = TRUE, cores = NULL)
+getFunctionalSpectra(eps, geneSets = "MSigDB", scale = TRUE, cores = NULL)
 ```
 
 ## Arguments
@@ -20,7 +20,9 @@ getFunctionalSpectra(eps, geneSets = "MSigDBv7", scale = TRUE, cores = NULL)
 
 - geneSets:
 
-  a List containing gene sets (default: MSigDB v7)
+  gene sets to score. Either \`"MSigDB"\` for the bundled cache,
+  \`"MSigDB\_\<version\>"\` for an explicit bundled release, or a named
+  list such as the result of \[get_msigdbr()\]
 
 - scale:
 

@@ -6,6 +6,7 @@
 #' @param labels a character vector containing training lables
 #' @param fold a integer indicating the fold number of cross validation (default: 5)
 #' @return a numeric indicating error rate in a single run
+#' @importFrom stats na.omit
 #' @export
 #' @examples
 #' \dontrun{
@@ -37,14 +38,14 @@ cross_validation <- function(fs, labels, fold = 5) {
 #'
 #' @param file filename of the gmt file
 #' @return a list containing gene sets by EntrezID
+#' @importFrom GSEABase EntrezIdentifier
 #' @export
 #' @examples
 #' \dontrun{
 #' msigdbv51 <- get_gene_sets("msigdb.v5.1.entrez.gmt")
 #' }
-
 get_gene_sets <- function(file) {
-  msig <- GSEABase::getGmt(file, geneIdType=EntrezIdentifier())
+  msig <- GSEABase::getGmt(file, geneIdType=GSEABase::EntrezIdentifier())
   GSEABase::geneIds(msig)
 }
 

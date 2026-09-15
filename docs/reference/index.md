@@ -39,7 +39,5 @@
 
 ## Data
 
-- [`MSigDBv5`](https://cityuhk-compbio.github.io/DeepCC/reference/MSigDB-data.md)
-  [`MSigDBv6`](https://cityuhk-compbio.github.io/DeepCC/reference/MSigDB-data.md)
-  [`MSigDBv7`](https://cityuhk-compbio.github.io/DeepCC/reference/MSigDB-data.md)
-  : MSigDB Gene Sets (v5, v6, v7)
+- [`MSigDB`](https://cityuhk-compbio.github.io/DeepCC/reference/MSigDB.md)
+  : Bundled MSigDB gene set cache

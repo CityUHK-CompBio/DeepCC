@@ -17,12 +17,16 @@ a named list of gene sets, each element a character vector of
 }
 \description{
 Retrieves the current MSigDB gene set collection from the `msigdbr`
-package. Returns a named list suitable for direct use in
-`getFunctionalSpectra()`.
+package. Use this when you want the newest release; the bundled
+[MSigDB] cache is used by default and needs neither `msigdbr` nor
+network access.
 }
 \examples{
 \dontrun{
 MSigDBr <- get_msigdbr()
 fs <- getFunctionalSpectra(eps, geneSets = MSigDBr)
 }
+}
+\seealso{
+[MSigDB] for the bundled offline snapshot
 }

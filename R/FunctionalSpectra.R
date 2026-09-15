@@ -34,16 +34,36 @@ calcEnrichmentScore <- function(geneList, geneSet)
   calcEnrichmentScoreCPP((names(geneList) %in% geneSet), geneList, 1)
 }
 
-#' Resolve gene sets from legacy string or list
+#' Resolve gene sets from a bundled name or a named list
 #' @noRd
 resolveGeneSets <- function(geneSets) {
   if (is.character(geneSets) && length(geneSets) == 1) {
-    stop(paste("String geneSets shortcuts (MSigDBv5/v6/v7) have been removed.",
-               "Use get_msigdbr() for current MSigDB data, get_gene_sets() for GMT files,",
-               "or pass a named list directly."))
+    return(loadBundledGeneSets(geneSets))
   }
   if (!is.list(geneSets)) stop("geneSets must be a character string or a named list.")
   geneSets
+}
+
+#' Load the bundled MSigDB cache by name
+#'
+#' Accepts `"MSigDB"` for the bundled snapshot, or `"MSigDB_<version>"`
+#' for an explicit release. The version is verified against the bundled
+#' data so a stale name cannot silently return different gene sets.
+#' @noRd
+loadBundledGeneSets <- function(name) {
+  env <- new.env(parent = emptyenv())
+  utils::data("MSigDB", package = "DeepCC", envir = env)
+  sets <- get("MSigDB", envir = env)
+  version <- attr(sets, "db_version")
+
+  if (identical(name, "MSigDB") || identical(name, paste0("MSigDB_", version))) {
+    return(sets)
+  }
+
+  stop(sprintf(
+    "Unknown geneSets value '%s'. Available: \"MSigDB\" (bundled MSigDB %s), \"MSigDB_%s\", or a named list. Use get_msigdbr() for the current release, get_gene_sets() for GMT files.",
+    name, version, version
+  ), call. = FALSE)
 }
 
 #' Map gene sets to flat integer indices for batch C++ kernel
@@ -69,7 +89,9 @@ buildFlatGeneSetIndex <- function(geneSets, geneNames) {
 #' legacy per-row parallel path when the input structure prevents batch indexing.
 #'
 #' @param eps a data.frame containing gene expression profiles (each row presents one sample)
-#' @param geneSets a List containing gene sets (default: MSigDB v7)
+#' @param geneSets gene sets to score. Either `"MSigDB"` for the bundled
+#'   cache, `"MSigDB_<version>"` for an explicit bundled release, or a named
+#'   list such as the result of [get_msigdbr()]
 #' @param scale logical indicating whether to center each gene column (default: TRUE)
 #' @param cores integer or NULL; number of CPU cores. NULL uses the native kernel's
 #'   thread pool. Set to a specific integer for legacy parallel fallback.
@@ -85,7 +107,7 @@ buildFlatGeneSetIndex <- function(geneSets, geneNames) {
 #' colnames(eps) <- paste0("G", seq_len(100))
 #' fs <- getFunctionalSpectra(eps, geneSets=list(setA=c("G1","G5","G20")))
 #' }
-getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = TRUE, cores = NULL) {
+getFunctionalSpectra <- function(eps, geneSets = 'MSigDB', scale = TRUE, cores = NULL) {
   geneSets <- resolveGeneSets(geneSets)
   P <- length(geneSets)
 
@@ -149,7 +171,9 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = TRUE, cores
 #' This function generates functional spectrum for a single gene expression profile.
 #'
 #' @param expressionProfile a named numeric vector containing gene expression profile
-#' @param geneSets a List containing gene sets (default: MSigDB v7)
+#' @param geneSets gene sets to score. Either `"MSigDB"` for the bundled
+#'   cache, `"MSigDB_<version>"` for an explicit bundled release, or a named
+#'   list such as the result of [get_msigdbr()]
 #' @param refExp a character indicating cancer typer according to TCGA's indentifier, or a named vector reference expression
 #' @param logChange a logical flag indicating whether the input data is already in log change form, e.g., for two color microarray, you should turn it on. (default: FALSE)
 #' @param inverseRescale a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)
@@ -166,7 +190,7 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDBv7', scale = TRUE, cores
 #' ref <- setNames(rnorm(100), paste0("G", seq_len(100)))
 #' fs <- getFunctionalSpectrum(ep, geneSets=list(setA=c("G1","G5","G20")), refExp=ref)
 #' }
-getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDBv7', refExp = NULL, logChange = FALSE, inverseRescale = FALSE, filter = -3) {
+getFunctionalSpectrum <- function(expressionProfile, geneSets = 'MSigDB', refExp = NULL, logChange = FALSE, inverseRescale = FALSE, filter = -3) {
   expressionProfile <- unlist(expressionProfile)
   if(!logChange) {
     if(is.null(refExp)) stop("Must have a reference expression profile!")

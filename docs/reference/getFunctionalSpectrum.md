@@ -8,7 +8,7 @@ profile.
 ``` r
 getFunctionalSpectrum(
   expressionProfile,
-  geneSets = "MSigDBv7",
+  geneSets = "MSigDB",
   refExp = NULL,
   logChange = FALSE,
   inverseRescale = FALSE,
@@ -24,7 +24,9 @@ getFunctionalSpectrum(
 
 - geneSets:
 
-  a List containing gene sets (default: MSigDB v7)
+  gene sets to score. Either \`"MSigDB"\` for the bundled cache,
+  \`"MSigDB\_\<version\>"\` for an explicit bundled release, or a named
+  list such as the result of \[get_msigdbr()\]
 
 - refExp:
 

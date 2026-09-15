@@ -12,7 +12,9 @@ LazyData: true
 LazyDataCompression: xz
 Depends:
     R (>= 4.0)
-URL: https://github.com/CityUHK-CompBio/DeepCC
+URL: https://cityuhk-compbio.github.io/DeepCC/,
+    https://github.com/CityUHK-CompBio/DeepCC
+BugReports: https://github.com/CityUHK-CompBio/DeepCC/issues
 LinkingTo:
     Rcpp
 Imports:
@@ -23,9 +25,9 @@ Imports:
     ggplot2,
     cowplot,
     GSEABase,
-    msigdbr,
     cluster
 Suggests:
+    msigdbr (>= 10.0.0),
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.1.0

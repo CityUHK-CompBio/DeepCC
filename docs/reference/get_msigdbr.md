@@ -1,8 +1,9 @@
 # Get current MSigDB gene sets
 
 Retrieves the current MSigDB gene set collection from the \`msigdbr\`
-package. Returns a named list suitable for direct use in
-\`getFunctionalSpectra()\`.
+package. Use this when you want the newest release; the bundled
+\[MSigDB\] cache is used by default and needs neither \`msigdbr\` nor
+network access.
 
 ## Usage
 
@@ -22,6 +23,10 @@ get_msigdbr(collection = NULL)
 
 a named list of gene sets, each element a character vector of Entrez
 gene IDs
+
+## See also
+
+\[MSigDB\] for the bundled offline snapshot
 
 ## Examples
 
