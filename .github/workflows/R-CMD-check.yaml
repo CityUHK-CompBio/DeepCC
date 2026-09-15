@@ -64,6 +64,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          if (!requireNamespace("BiocManager", quietly=TRUE)) install.packages("BiocManager")
+          BiocManager::install("GSEABase", ask = FALSE)
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
