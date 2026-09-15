@@ -46,10 +46,10 @@ test_that("batch kernel matches legacy per-sample calculation with scaling", {
   expect_equal(as.matrix(got), ref, tolerance = 1e-10)
 })
 
-test_that("geneSets string resolves correctly", {
-  gs <- DeepCC:::resolveGeneSets("MSigDBv7")
-  expect_type(gs, "list")
-  expect_gt(length(gs), 0)
+test_that("geneSets string shortcuts are removed with clear error", {
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv7"), "have been removed")
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv5"), "have been removed")
+  expect_error(DeepCC:::resolveGeneSets("MSigDBv6"), "have been removed")
 })
 
 test_that("single sample path uses same scoring kernel", {
