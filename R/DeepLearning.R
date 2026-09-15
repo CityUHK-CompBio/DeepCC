@@ -99,16 +99,19 @@ save_DeepCC_model <- function(deepcc_model, prefix) {
 
 #' Load DeepCC Model
 #'
-#' Loads a saved DeepCC model. Supports both the new format (with metadata)
-#' and the legacy 0.1.1 format (without metadata).
+#' Loads a saved DeepCC model. Models trained under Keras 2 before the
+#' keras3 migration are rebuilt from their recorded architecture, so the
+#' published pre-trained models keep working. Both the new format (with
+#' `feature_names` metadata) and the legacy 0.1.1 format are supported.
 #'
 #' @param prefix file path prefix
 #' @return a DeepCC model with \code{classifier}, \code{levels}, and
 #'   optionally \code{feature_names}
+#' @seealso [save_DeepCC_model()] to write a model in the current format
 #' @export
 load_DeepCC_model <- function(prefix){
   load(file = paste0(prefix, ".RData"))
-  classifier <- keras3::load_model(paste0(prefix, ".hdf5"))
+  classifier <- loadClassifierAnyFormat(paste0(prefix, ".hdf5"))
   model <- list(classifier = classifier, levels = levels)
   if (exists("feature_names", envir = environment())) {
     fn <- get("feature_names", envir = environment())

@@ -96,6 +96,28 @@ buildFlatGeneSetIndex <- function(geneSets, geneNames) {
 #' @param cores integer or NULL; number of CPU cores. NULL uses the native kernel's
 #'   thread pool. Set to a specific integer for legacy parallel fallback.
 #' @return a data.frame containing functional spectra
+#' @details
+#' A functional spectrum summarises, for one sample, how strongly each gene
+#' set is enriched among that sample's most highly expressed genes.
+#'
+#' With `scale = TRUE` (the default) each gene is centred across the samples
+#' in `eps` by subtracting its mean, so every value becomes a deviation from
+#' the cohort average for that gene. Each sample is then ranked independently
+#' on those centred values and scored with the weighted running-sum enrichment
+#' statistic.
+#'
+#' This is not a log fold change. DeepCC does not compare labelled groups, does
+#' not select differentially expressed genes, and needs no group labels. A
+#' score is relative to the other samples supplied in `eps`, so the same sample
+#' receives different scores in a different cohort. Supply the full cohort you
+#' wish to compare against, and keep that cohort fixed between training and
+#' prediction.
+#'
+#' With `scale = FALSE` no centring is applied and each sample is ranked on its
+#' own values, which makes a score independent of the other rows.
+#'
+#' A single row with `scale = TRUE` centres to zero and therefore returns all
+#' zeros. Use [getFunctionalSpectrum()] for genuine single-sample scoring.
 #' @seealso  \code{\link{getFunctionalSpectrum}} for a single expression profile.
 #' @importFrom foreach foreach %dopar%
 #' @importFrom doParallel registerDoParallel
@@ -179,6 +201,22 @@ getFunctionalSpectra <- function(eps, geneSets = 'MSigDB', scale = TRUE, cores =
 #' @param inverseRescale a logical flag indicating whether we rescale the reference to the scale of input data. If your single sample is microarray data and the reference is RNA-Seq, you should turn it on. (default: FALSE)
 #' @param filter a numeric indicating the cutoff value of expression. (default: -3)
 #' @return a numeric vector containing functional spectrum
+#' @details
+#' A single sample cannot be centred against a cohort, so a reference
+#' expression profile is required unless the input is already in log-change
+#' form. The reference is first restricted to genes expressed above `filter`,
+#' then the sample and reference are related by a linear fit and the score is
+#' computed on the difference between the fitted reference and the sample.
+#' The resulting spectrum is a comparison of the sample against that
+#' reference, not an enrichment of differentially expressed genes.
+#'
+#' Set `inverseRescale = TRUE` when the sample is microarray and the reference
+#' is RNA-seq; this reverses the direction of the rescaling to account for the
+#' different expression scales. Set `logChange = TRUE` when the input is
+#' already a log-change vector, in which case no reference is used.
+#'
+#' Scores are not comparable across different references, because the reference
+#' defines the baseline being compared against.
 #' @note You can generate the reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform.
 #' In DeepCC we also prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.
 #' If your single sample is microarray data, we strongly sugguest turn the parameter \code{inverseRescale} on, since TCGA is RNA-Seq, which has very small expression value for low expressed genes, compared with microarray.

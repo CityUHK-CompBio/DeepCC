@@ -26,6 +26,29 @@ This function generates functional spectra for given gene expression profiles.
 Uses a fast batch native kernel by default, with automatic fallback to the
 legacy per-row parallel path when the input structure prevents batch indexing.
 }
+\details{
+A functional spectrum summarises, for one sample, how strongly each gene
+set is enriched among that sample's most highly expressed genes.
+
+With `scale = TRUE` (the default) each gene is centred across the samples
+in `eps` by subtracting its mean, so every value becomes a deviation from
+the cohort average for that gene. Each sample is then ranked independently
+on those centred values and scored with the weighted running-sum enrichment
+statistic.
+
+This is not a log fold change. DeepCC does not compare labelled groups, does
+not select differentially expressed genes, and needs no group labels. A
+score is relative to the other samples supplied in `eps`, so the same sample
+receives different scores in a different cohort. Supply the full cohort you
+wish to compare against, and keep that cohort fixed between training and
+prediction.
+
+With `scale = FALSE` no centring is applied and each sample is ranked on its
+own values, which makes a score independent of the other rows.
+
+A single row with `scale = TRUE` centres to zero and therefore returns all
+zeros. Use [getFunctionalSpectrum()] for genuine single-sample scoring.
+}
 \examples{
 \dontrun{
 set.seed(42)

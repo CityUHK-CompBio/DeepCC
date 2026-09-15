@@ -91,6 +91,12 @@
 <p>Pinning <code>geneSets</code> to an explicit release keeps an analysis reproducible even after MSigDB is updated.</p>
 </div>
 <div class="section level3">
+<h3 id="what-the-scores-mean">What the scores mean<a class="anchor" aria-label="anchor" href="#what-the-scores-mean"></a>
+</h3>
+<p>A functional spectrum records how strongly each gene set is enriched among one sample’s most highly expressed genes. With the default <code>scale = TRUE</code>, each gene is centred across the samples you supply, each sample is ranked on those centred values, and the weighted running-sum enrichment statistic is computed per sample.</p>
+<p>This is not a log fold change and no group labels are involved. A score is relative to the cohort in <code>eps</code>, so the same sample receives different scores in a different cohort; keep the cohort fixed between training and prediction. A single row with <code>scale = TRUE</code> centres to zero, so use <code><a href="reference/getFunctionalSpectrum.html">getFunctionalSpectrum()</a></code> for genuine single-sample scoring.</p>
+</div>
+<div class="section level3">
 <h3 id="train-a-model">Train a model<a class="anchor" aria-label="anchor" href="#train-a-model"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -169,6 +175,7 @@
 <h2 id="pre-trained-models">Pre-trained models<a class="anchor" aria-label="anchor" href="#pre-trained-models"></a>
 </h2>
 <p>Colorectal cancer models trained on TCGA-COADREAD and CRCSC datasets are available from the <a href="https://github.com/zero19970/deepcc_model" class="external-link">deepcc_model repository</a>. HDF5 files in that repository are Git LFS pointers; use <code>git lfs pull</code> after cloning to obtain actual weights.</p>
+<p>Those models were saved by Keras 2. <code><a href="reference/load_DeepCC_model.html">load_DeepCC_model()</a></code> rebuilds them from their recorded architecture, so they load under the current keras3 without conversion. Saving a loaded model writes it in the current format.</p>
 </div>
 <div class="section level2">
 <h2 id="reference-profiles">Reference profiles<a class="anchor" aria-label="anchor" href="#reference-profiles"></a>

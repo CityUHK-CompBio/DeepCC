@@ -20,6 +20,7 @@ LinkingTo:
 Imports:
     Rcpp,
     keras3,
+    reticulate,
     foreach,
     doParallel,
     ggplot2,

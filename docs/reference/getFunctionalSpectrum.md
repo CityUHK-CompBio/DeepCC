@@ -53,6 +53,26 @@ getFunctionalSpectrum(
 
 a numeric vector containing functional spectrum
 
+## Details
+
+A single sample cannot be centred against a cohort, so a reference
+expression profile is required unless the input is already in log-change
+form. The reference is first restricted to genes expressed above
+\`filter\`, then the sample and reference are related by a linear fit
+and the score is computed on the difference between the fitted reference
+and the sample. The resulting spectrum is a comparison of the sample
+against that reference, not an enrichment of differentially expressed
+genes.
+
+Set \`inverseRescale = TRUE\` when the sample is microarray and the
+reference is RNA-seq; this reverses the direction of the rescaling to
+account for the different expression scales. Set \`logChange = TRUE\`
+when the input is already a log-change vector, in which case no
+reference is used.
+
+Scores are not comparable across different references, because the
+reference defines the baseline being compared against.
+
 ## Note
 
 You can generate the reference expression profile from your previous

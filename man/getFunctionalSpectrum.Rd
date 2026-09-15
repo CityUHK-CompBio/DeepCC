@@ -34,6 +34,23 @@ a numeric vector containing functional spectrum
 \description{
 This function generates functional spectrum for a single gene expression profile.
 }
+\details{
+A single sample cannot be centred against a cohort, so a reference
+expression profile is required unless the input is already in log-change
+form. The reference is first restricted to genes expressed above `filter`,
+then the sample and reference are related by a linear fit and the score is
+computed on the difference between the fitted reference and the sample.
+The resulting spectrum is a comparison of the sample against that
+reference, not an enrichment of differentially expressed genes.
+
+Set `inverseRescale = TRUE` when the sample is microarray and the reference
+is RNA-seq; this reverses the direction of the rescaling to account for the
+different expression scales. Set `logChange = TRUE` when the input is
+already a log-change vector, in which case no reference is used.
+
+Scores are not comparable across different references, because the reference
+defines the baseline being compared against.
+}
 \note{
 You can generate the reference expression profile from your previous data or public data, which is the same(similiar) cancer type and platform.
 In DeepCC we also prepared average expression profiles of each cancer types in TCGA project as references. To use them, just use the TCGA identifier (COADREAD, BRCA, OV, etc.) to indicate the cancer type.

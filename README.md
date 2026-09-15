@@ -63,6 +63,20 @@ fs <- getFunctionalSpectra(eps, geneSets = hallmark)
 Pinning `geneSets` to an explicit release keeps an analysis reproducible
 even after MSigDB is updated.
 
+### What the scores mean
+
+A functional spectrum records how strongly each gene set is enriched among
+one sample's most highly expressed genes. With the default `scale = TRUE`,
+each gene is centred across the samples you supply, each sample is ranked on
+those centred values, and the weighted running-sum enrichment statistic is
+computed per sample.
+
+This is not a log fold change and no group labels are involved. A score is
+relative to the cohort in `eps`, so the same sample receives different scores
+in a different cohort; keep the cohort fixed between training and prediction.
+A single row with `scale = TRUE` centres to zero, so use
+`getFunctionalSpectrum()` for genuine single-sample scoring.
+
 ### Train a model
 
 ```r
@@ -121,6 +135,10 @@ available from the
 [deepcc_model repository](https://github.com/zero19970/deepcc_model).
 HDF5 files in that repository are Git LFS pointers; use `git lfs pull`
 after cloning to obtain actual weights.
+
+Those models were saved by Keras 2. `load_DeepCC_model()` rebuilds them from
+their recorded architecture, so they load under the current keras3 without
+conversion. Saving a loaded model writes it in the current format.
 
 ## Reference profiles
 
