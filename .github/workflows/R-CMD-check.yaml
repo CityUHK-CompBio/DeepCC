@@ -96,6 +96,8 @@ jobs:
       - name: Install hard dependencies only
         run: |
           install.packages("remotes")
+          if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+          BiocManager::install("GSEABase", ask = FALSE, update = FALSE)
           remotes::install_deps(dependencies = c("Depends", "Imports", "LinkingTo"))
           remotes::install_local(".", dependencies = FALSE, upgrade = "never")
         shell: Rscript {0}
